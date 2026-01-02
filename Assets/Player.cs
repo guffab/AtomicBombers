@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,20 +10,27 @@ public class Player : MonoBehaviour
     Direction direction;
     InputSystem_Actions actions;
 
+    public int Strength { get; private set; }
+    public int Bombs { get; private set; }
+    public int AtomicBombs { get; private set; }
+    public bool KeepForce { get; private set; }
+
     Rigidbody2D rb;
-    SpriteRenderer rendrer;
+    SpriteRenderer sr;
     InputAction moveAction;
 
     public int playerNumber;
-    public float speed = 2f;
+    public float speed = 1f;
     public Sprite[] sprites;
     public Appearance appearance;
     public float animationFrameTime = 0.15f;
 
+    public GameObject DeadPlayerPrefab;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rendrer = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
         actions = new InputSystem_Actions();
         moveAction = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
     }
@@ -70,7 +78,26 @@ public class Player : MonoBehaviour
         int offset = (playerNumber - 1) * 12 + 48 * (int)appearance;
         int index = (int)direction * framesPerAnimation + frame + offset;
 
-        rendrer.sprite = sprites[index];
+        sr.sprite = sprites[index];
+    }
+
+    public void Kill()
+    {
+        var grid = GridSystem.Current;
+        var position = grid.GetPosition(gameObject);
+        var deadPlayer = Instantiate(DeadPlayerPrefab, grid.ToWorld(position), Quaternion.identity);
+        grid.Add(deadPlayer, position);
+
+        Destroy(gameObject);
+    }
+
+    internal void Eat(DeadPlayer deadPlayer)
+    {
+        Strength = Math.Max(Strength, deadPlayer.Strength);
+        Bombs = Math.Max(Bombs, deadPlayer.Bombs);
+        AtomicBombs = Math.Max(AtomicBombs, deadPlayer.AtomicBombs);
+        KeepForce = KeepForce || deadPlayer.KeepForce;
+        Destroy(deadPlayer.gameObject);
     }
 
     public enum Direction
@@ -85,9 +112,9 @@ public class Player : MonoBehaviour
     {
         Normal,
         Pacman,
-        Black,
+        Immortal,
         Sick,
         Atomic,
-        White,
+        Ghost,
     }
 }

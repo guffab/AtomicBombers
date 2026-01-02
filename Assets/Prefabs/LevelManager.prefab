@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7378346214056361065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2159828827468939985}
+  - component: {fileID: 6625751559043552467}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2159828827468939985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7378346214056361065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4559384, y: -0.5865375, z: -0.0029932535}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6625751559043552467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7378346214056361065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121c3c81a49288d18b1a2fff63b708e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BlockPrefab: {fileID: 0}
+  MinePrefab: {fileID: 5066260766953476783, guid: 9e7d7b18085a265d6961051c492af97c, type: 3}
+  Player4Prefab: {fileID: 5485407704223475068, guid: 2d9a6f2037f7ea326a3e2bc9c9040664, type: 3}
+  Player3Prefab: {fileID: 1573744699721354356, guid: d9d0dc6e62908407ba3db55059afef2d, type: 3}
+  Player2Prefab: {fileID: 2577906770295868710, guid: 8792ef9659c49bed78c463ec61a1716b, type: 3}
+  Player1Prefab: {fileID: 432050885274530321, guid: fcb6572134272315fb1d63eda434ff1e, type: 3}
+  LightPrefab: {fileID: 0}
+  KeepForcePrefab: {fileID: 0}
+  PowderPrefab: {fileID: 0}
+  BombPrefab: {fileID: 0}
+  AtomicBombPrefab: {fileID: 0}
+  MegabombPrefab: {fileID: 0}
+  PacmanPrefab: {fileID: 0}
+  BlackPrefab: {fileID: 0}
+  WhitePrefab: {fileID: 0}
+  SurprisePrefab: {fileID: 0}
+  GridDimensions: {x: 21, y: 17}

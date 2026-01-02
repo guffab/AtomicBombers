@@ -28,12 +28,12 @@ public record LevelData(long ItemProbabilities, int BlockType, bool Fill, Dictio
     /// <summary>
     /// Call at level start.
     /// </summary>
-    public GridElement GetItemAt(Vector2Int v)
+    public GridElement GetItemAt(int x, int y)
     {
-        if (Layout.TryGetValue($"{v.x},{v.y}", out var itemType))
+        if (Layout.TryGetValue($"{x},{y}", out var itemType))
             return itemType;
 
-        if (HiddenItems.ContainsKey($"{v.x},{v.y}"))
+        if (HiddenItems.ContainsKey($"{x},{y}"))
             return GridElement.SolidBlock;
 
         if (Fill)
@@ -45,9 +45,9 @@ public record LevelData(long ItemProbabilities, int BlockType, bool Fill, Dictio
     /// <summary>
     /// Call after a block exploded.
     /// </summary>
-    public GridElement GetNewItemAt(Vector2Int v)
+    public GridElement GetNewItemAt(int x, int y)
     {
-        if (HiddenItems.TryGetValue($"{v.x},{v.y}", out var hiddenItem))
+        if (HiddenItems.TryGetValue($"{x},{y}", out var hiddenItem))
             return hiddenItem;
 
         AvailableItems ??= GetAvailableItems();
@@ -97,8 +97,8 @@ public record LevelData(long ItemProbabilities, int BlockType, bool Fill, Dictio
         AtomicBomb,
         Megabomb,
         Pacman,
-        Black,
-        White,
+        Immortal,
+        Ghost,
         Surprise,
     }
 }

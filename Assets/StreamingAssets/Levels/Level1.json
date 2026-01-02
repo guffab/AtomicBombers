@@ -3,12 +3,19 @@
   "BlockType": 1,
   "Fill": true,
   "Layout": {
-    "1,1": "Player1",
+    "3,1": "Player1",
     "1,2": "Empty",
     "2,1": "Empty",
-    "17,21": "Player2",
-    "16,21": "Empty",
-    "17,20": "Empty"
+    "3,2": "Mine",
+    "4,2": "Mine",
+    "5,2": "Mine",
+    "6,2": "Mine",
+    "7,2": "Mine",
+    "4,3": "Mine",
+    "4,4": "Mine",
+    "1,1": "Player2",
+    "21,16": "Empty",
+    "20,17": "Empty"
   },
   "HiddenItems": {
 
