@@ -1,0 +1,16 @@
+{
+  "ItemProbabilities": 11111111,
+  "BlockType": 1,
+  "Fill": true,
+  "Layout": {
+    "1,1": "Player1",
+    "1,2": "Empty",
+    "2,1": "Empty",
+    "17,21": "Player2",
+    "16,21": "Empty",
+    "17,20": "Empty"
+  },
+  "HiddenItems": {
+
+  }
+}
