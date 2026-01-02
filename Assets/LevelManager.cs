@@ -22,11 +22,11 @@ public class LevelManager : MonoBehaviour
     public GameObject KeepForcePrefab;
     public GameObject PowderPrefab;
     public GameObject BombPrefab;
-    public GameObject AtomicBombPrefab;
+    public GameObject AtomicbombPrefab;
     public GameObject MegabombPrefab;
     public GameObject PacmanPrefab;
-    public GameObject BlackPrefab;
-    public GameObject WhitePrefab;
+    public GameObject ImmortalPrefab;
+    public GameObject GhostPrefab;
     public GameObject SurprisePrefab;
 
     [Tooltip("Grid extends from (1,1) to (x, y) entered in this property. Positive by convention.")]
@@ -59,11 +59,11 @@ public class LevelManager : MonoBehaviour
                     LevelData.GridElement.KeepForce => KeepForcePrefab,
                     LevelData.GridElement.Powder => PowderPrefab,
                     LevelData.GridElement.Bomb => BombPrefab,
-                    LevelData.GridElement.AtomicBomb => AtomicBombPrefab,
+                    LevelData.GridElement.AtomicBomb => AtomicbombPrefab,
                     LevelData.GridElement.Megabomb => MegabombPrefab,
                     LevelData.GridElement.Pacman => PacmanPrefab,
-                    LevelData.GridElement.Immortal => BlackPrefab,
-                    LevelData.GridElement.Ghost => WhitePrefab,
+                    LevelData.GridElement.Immortal => ImmortalPrefab,
+                    LevelData.GridElement.Ghost => GhostPrefab,
                     LevelData.GridElement.Surprise => SurprisePrefab,
                     _ => null,
                 };

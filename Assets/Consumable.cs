@@ -1,7 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Consumable : MonoBehaviour
 {
+    static readonly System.Random random = new();
+    static readonly List<Kind> options = Enum.GetValues(typeof(Kind)).Cast<Kind>().Skip(1).ToList();
+
     public Sprite LightSprite;
     public Sprite KeepForceSprite;
     public Sprite PowderSprite;
@@ -14,20 +20,24 @@ public class Consumable : MonoBehaviour
     public Sprite SurpriseSprite;
     public Kind Type;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        if (Type is Kind.Unset)
+            Type = options[random.Next(options.Count)];
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        
+        if (other.gameObject.TryGetComponent<Player>(out var player))
+        {
+            player.Consume(Type);
+            Destroy(gameObject);
+        }
     }
 
     public enum Kind
     {
+        Unset,
         Light,
         KeepForce,
         Powder,

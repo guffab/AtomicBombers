@@ -25,8 +25,9 @@ public class Explosion : MonoBehaviour
                 else if (element.TryGetComponent<Block>(out var block))
                     block.Demolish();
 
-                // else if (element.TryGetComponent<Consumable>(out var consumable))
-                //     consumable.Remove();
+                else if (element.TryGetComponent<Consumable>(out var consumable))
+                    Destroy(consumable.gameObject);
+
                 else
                     Debug.Log($"Unhandled explosion on {element.name}");
             }

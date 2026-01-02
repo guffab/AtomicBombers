@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    static readonly System.Random random = new();
+    static readonly Appearance[] appearances = new Appearance[] { Appearance.Pacman, Appearance.Immortal, Appearance.Sick, Appearance.Ghost };
+    
     const int framesPerAnimation = 3;
     float timer;
     Vector2 moveInput = new Vector2(0, 0);
@@ -97,7 +102,57 @@ public class Player : MonoBehaviour
         Bombs = Math.Max(Bombs, deadPlayer.Bombs);
         AtomicBombs = Math.Max(AtomicBombs, deadPlayer.AtomicBombs);
         KeepForce = KeepForce || deadPlayer.KeepForce;
-        Destroy(deadPlayer.gameObject);
+    }
+
+    internal void Consume(Consumable.Kind type)
+    {
+        if (type is Consumable.Kind.Light)
+        {
+            //turn on light
+            Debug.Log("Light turned on");
+        }
+
+        else if (type is Consumable.Kind.KeepForce)
+            KeepForce = true;
+
+        else if (type is Consumable.Kind.Powder)
+            Strength = Math.Min(Strength + 1, 10);
+
+        else if (type is Consumable.Kind.Bomb)
+            Bombs = Math.Min(Bombs + 1, 999_999);
+
+        else if (type is Consumable.Kind.Atomicbomb)
+            AtomicBombs = Math.Min(AtomicBombs + 1, 999_999);
+
+        else if (type is Consumable.Kind.Megabomb)
+        {
+            Strength = 10;
+            AtomicBombs = 999_999;
+        }
+
+        else if (type is Consumable.Kind.Pacman)
+        {
+            appearance = Appearance.Pacman;
+            SetCurrentSprite();
+        }
+
+        else if (type is Consumable.Kind.Immortal)
+        {
+            appearance = Appearance.Immortal;
+            SetCurrentSprite();
+        }
+
+        else if (type is Consumable.Kind.Ghost)
+        {
+            appearance = Appearance.Ghost;
+            SetCurrentSprite();
+        }
+
+        else if (type is Consumable.Kind.Surprise)
+        {
+            appearance = appearances[random.Next(appearances.Length)];
+            SetCurrentSprite();
+        }
     }
 
     public enum Direction

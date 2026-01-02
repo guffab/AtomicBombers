@@ -50,14 +50,14 @@ MonoBehaviour:
   Player3Prefab: {fileID: 1573744699721354356, guid: d9d0dc6e62908407ba3db55059afef2d, type: 3}
   Player2Prefab: {fileID: 2577906770295868710, guid: 8792ef9659c49bed78c463ec61a1716b, type: 3}
   Player1Prefab: {fileID: 432050885274530321, guid: fcb6572134272315fb1d63eda434ff1e, type: 3}
-  LightPrefab: {fileID: 0}
-  KeepForcePrefab: {fileID: 0}
-  PowderPrefab: {fileID: 0}
-  BombPrefab: {fileID: 0}
-  AtomicBombPrefab: {fileID: 0}
-  MegabombPrefab: {fileID: 0}
-  PacmanPrefab: {fileID: 0}
-  BlackPrefab: {fileID: 0}
-  WhitePrefab: {fileID: 0}
-  SurprisePrefab: {fileID: 0}
+  LightPrefab: {fileID: 7261721209308163979, guid: f3fef1e387f0847c497a5a54df90209b, type: 3}
+  KeepForcePrefab: {fileID: 5045709776704259903, guid: ab70e048c1391ddaebab8e277f48d90d, type: 3}
+  PowderPrefab: {fileID: 3587896152799215002, guid: 3f98585607c2072f69b1e62059154363, type: 3}
+  BombPrefab: {fileID: 4508713041120785298, guid: f92ff10613673d29fb1b7d31c7a70787, type: 3}
+  AtomicbombPrefab: {fileID: 8995976936717014347, guid: 8247ef519da154218811bb7b9c43b4e0, type: 3}
+  MegabombPrefab: {fileID: 3526577667187995393, guid: ecff270f58d4c8657963791515ef28d9, type: 3}
+  PacmanPrefab: {fileID: 3558152691098309503, guid: b0e2ddc336ec422c3bdee2978d7ea4b0, type: 3}
+  ImmortalPrefab: {fileID: 1837631978378484995, guid: 2648e5bee4f6d15fe9e0dd1aa2088706, type: 3}
+  GhostPrefab: {fileID: 4128940192003580034, guid: 07f64a63960c16f00ab968c35f81b1f6, type: 3}
+  SurprisePrefab: {fileID: 1748878773842960639, guid: 25f7a6897419c833d86ff24ae901bdbe, type: 3}
   GridDimensions: {x: 21, y: 17}
