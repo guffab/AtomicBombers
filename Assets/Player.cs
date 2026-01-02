@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -132,26 +130,37 @@ public class Player : MonoBehaviour
 
         else if (type is Consumable.Kind.Pacman)
         {
-            appearance = Appearance.Pacman;
+            appearance = SelectWorst(Appearance.Pacman);
             SetCurrentSprite();
         }
 
         else if (type is Consumable.Kind.Immortal)
         {
-            appearance = Appearance.Immortal;
+            appearance = SelectWorst(Appearance.Immortal);
             SetCurrentSprite();
         }
 
         else if (type is Consumable.Kind.Ghost)
         {
-            appearance = Appearance.Ghost;
+            appearance = SelectWorst(Appearance.Ghost);
             SetCurrentSprite();
         }
 
         else if (type is Consumable.Kind.Surprise)
         {
-            appearance = appearances[random.Next(appearances.Length)];
+            appearance = SelectWorst(appearances[random.Next(appearances.Length)]);
             SetCurrentSprite();
+        }
+
+        Appearance SelectWorst(Appearance newAppearance)
+        {
+            if (appearance is Appearance.Pacman)
+                return Appearance.Pacman;
+
+            if (appearance is Appearance.Immortal or Appearance.Ghost)
+                return newAppearance is Appearance.Sick ? newAppearance : appearance;
+
+            return newAppearance;
         }
     }
 

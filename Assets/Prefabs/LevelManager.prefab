@@ -44,7 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 121c3c81a49288d18b1a2fff63b708e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockPrefab: {fileID: 0}
+  PersistentBlockPrefab: {fileID: 1565671050838584804, guid: 514fa84e4efa2fbf6ae3416f1a26c4bc, type: 3}
+  DamagedBlockPrefab: {fileID: 6676342944700740580, guid: ba2c7c65d3655aee7b9ef78ef97d6d66, type: 3}
+  SolidBlockPrefab: {fileID: 1596453453834885811, guid: eaf321d4b6d3f7ce285dfdce85a9f18a, type: 3}
+  WalkableBlockPrefab: {fileID: 5957209679896608735, guid: 84fbe47abf022e14aad9041f4218e264, type: 3}
   MinePrefab: {fileID: 5066260766953476783, guid: 9e7d7b18085a265d6961051c492af97c, type: 3}
   Player4Prefab: {fileID: 5485407704223475068, guid: 2d9a6f2037f7ea326a3e2bc9c9040664, type: 3}
   Player3Prefab: {fileID: 1573744699721354356, guid: d9d0dc6e62908407ba3db55059afef2d, type: 3}

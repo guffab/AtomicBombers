@@ -56,20 +56,19 @@ public class GridSystem
         }
     }
 
-    public void Remove(GameObject g)
+    public Vector2Int Remove(GameObject g)
     {
-        var v = ObjectToGrid[g];
-        if (GridToObject.TryGetValue(v, out var list) && list.Count > 1)
+        var pos = ObjectToGrid[g];
+        if (GridToObject.TryGetValue(pos, out var list))
             list.Remove(g);
-        else
-            GridToObject.Remove(v);
 
         ObjectToGrid.Remove(g);
+        return pos;
     }
 
     public Vector3 ToWorld(Vector2Int v)
     {
-        var screenPos = new Vector3((float)(v.x * 28), (float)(v.y * 28), 10);
+        var screenPos = new Vector3(v.x * 28, v.y * 28, 10);
         var worldPos = Camera.main.ScreenToWorldPoint(screenPos);
         worldPos.y -= .12f; //not sure why all coordinates are wrong by this factor
         return worldPos;

@@ -9,10 +9,15 @@ public class LevelManager : MonoBehaviour
     static int currentIndex;
     static List<LevelData> Levels;
 
+    public static LevelManager Instance;
+
     [HideInInspector] public LevelData Current => Levels[currentIndex];
 
     //prefabs
-    public GameObject BlockPrefab;
+    public GameObject PersistentBlockPrefab;
+    public GameObject DamagedBlockPrefab;
+    public GameObject SolidBlockPrefab;
+    public GameObject WalkableBlockPrefab;
     public GameObject MinePrefab;
     public GameObject Player4Prefab;
     public GameObject Player3Prefab;
@@ -34,6 +39,7 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
+        Instance = this;
         var grid = new GridSystem(GridDimensions);
         Levels ??= LoadLevels();
         currentIndex = (currentIndex + 1) % Levels.Count;
@@ -43,49 +49,49 @@ public class LevelManager : MonoBehaviour
             for (int y = 1; y <= GridDimensions.y; y++)
             {
                 var gridPos = new Vector2Int(x, y);
-                var gridData = Current.GetItemAt(x, y);
-                GameObject itemToInstantiate = Current.GetItemAt(x, y) switch
-                {
-                    LevelData.GridElement.PersistentBlock => BlockPrefab,
-                    LevelData.GridElement.DurableBlock => BlockPrefab,
-                    LevelData.GridElement.SolidBlock => BlockPrefab,
-                    LevelData.GridElement.WalkableBlock => BlockPrefab,
-                    LevelData.GridElement.Mine => MinePrefab,
-                    LevelData.GridElement.Player4 => Player4Prefab,
-                    LevelData.GridElement.Player3 => Player3Prefab,
-                    LevelData.GridElement.Player2 => Player2Prefab,
-                    LevelData.GridElement.Player1 => Player1Prefab,
-                    LevelData.GridElement.Light => LightPrefab,
-                    LevelData.GridElement.KeepForce => KeepForcePrefab,
-                    LevelData.GridElement.Powder => PowderPrefab,
-                    LevelData.GridElement.Bomb => BombPrefab,
-                    LevelData.GridElement.AtomicBomb => AtomicbombPrefab,
-                    LevelData.GridElement.Megabomb => MegabombPrefab,
-                    LevelData.GridElement.Pacman => PacmanPrefab,
-                    LevelData.GridElement.Immortal => ImmortalPrefab,
-                    LevelData.GridElement.Ghost => GhostPrefab,
-                    LevelData.GridElement.Surprise => SurprisePrefab,
-                    _ => null,
-                };
-
-                if (itemToInstantiate != null)
-                {
-                    var position = grid.ToWorld(gridPos);
-                    var newObject = Instantiate(itemToInstantiate, position, Quaternion.identity);
-                    grid.Add(newObject, gridPos);
-                    
-                    if (itemToInstantiate == BlockPrefab)
-                    {
-                        newObject.GetComponent<Block>().CurrentState = gridData switch
-                        {
-                            LevelData.GridElement.PersistentBlock => Block.State.Persistent,
-                            LevelData.GridElement.DurableBlock => Block.State.DurableFull,
-                            LevelData.GridElement.SolidBlock => Block.State.Solid,
-                            _ => Block.State.Walkable,
-                        };
-                    }
-                }
+                var gridElement = Current.GetItemAt(gridPos);
+                PlaceElement(gridElement, gridPos);
             }
+        }
+    }
+
+    public void PlaceNewElement(Vector2Int gridPos)
+    {
+        var gridElement = Current.GetNewItemAt(gridPos);
+        PlaceElement(gridElement, gridPos);
+    }
+
+    private void PlaceElement(LevelData.GridElement gridElement, Vector2Int gridPos)
+    {
+        var itemToInstantiate = gridElement switch
+        {
+            LevelData.GridElement.PersistentBlock => PersistentBlockPrefab,
+            LevelData.GridElement.DamagedBlock => DamagedBlockPrefab,
+            LevelData.GridElement.SolidBlock => SolidBlockPrefab,
+            LevelData.GridElement.WalkableBlock => WalkableBlockPrefab,
+            LevelData.GridElement.Mine => MinePrefab,
+            LevelData.GridElement.Player4 => Player4Prefab,
+            LevelData.GridElement.Player3 => Player3Prefab,
+            LevelData.GridElement.Player2 => Player2Prefab,
+            LevelData.GridElement.Player1 => Player1Prefab,
+            LevelData.GridElement.Light => LightPrefab,
+            LevelData.GridElement.KeepForce => KeepForcePrefab,
+            LevelData.GridElement.Powder => PowderPrefab,
+            LevelData.GridElement.Bomb => BombPrefab,
+            LevelData.GridElement.AtomicBomb => AtomicbombPrefab,
+            LevelData.GridElement.Megabomb => MegabombPrefab,
+            LevelData.GridElement.Pacman => PacmanPrefab,
+            LevelData.GridElement.Immortal => ImmortalPrefab,
+            LevelData.GridElement.Ghost => GhostPrefab,
+            LevelData.GridElement.Surprise => SurprisePrefab,
+            _ => null,
+        };
+
+        if (itemToInstantiate != null)
+        {
+            var position = GridSystem.Current.ToWorld(gridPos);
+            var newObject = Instantiate(itemToInstantiate, position, Quaternion.identity);
+            GridSystem.Current.Add(newObject, gridPos);
         }
     }
 

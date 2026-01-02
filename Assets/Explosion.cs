@@ -13,7 +13,7 @@ public class Explosion : MonoBehaviour
         {
             foreach (var element in elements.ToList())
             {
-                if (element.TryGetComponent<Explosion>(out _))
+                if (element == null || element.TryGetComponent<Explosion>(out _))
                     continue;
                 
                 if (element.TryGetComponent<Mine>(out var mine))

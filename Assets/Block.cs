@@ -7,7 +7,27 @@ public class Block : MonoBehaviour
 
     public void Demolish()
     {
-        
+        if (CurrentState is State.Persistent)
+            return;
+
+        if (CurrentState is State.SlightlyDamaged)
+            CurrentState = State.MediumDamaged;
+
+        else if (CurrentState is State.MediumDamaged)
+            CurrentState = State.HeavyDamaged;
+
+        else if (CurrentState is State.HeavyDamaged)
+        {
+            GridSystem.Current.Remove(gameObject);
+            Destroy(gameObject);
+        }
+
+        else
+        {
+            var gridPos = GridSystem.Current.Remove(gameObject);
+            LevelManager.Instance.PlaceNewElement(gridPos);
+            Destroy(gameObject);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,9 +45,9 @@ public class Block : MonoBehaviour
     public enum State
     {
         Persistent,
-        DurableFull,
-        DurableHalf,
-        DurableLittle,
+        SlightlyDamaged,
+        MediumDamaged,
+        HeavyDamaged,
         Solid,
         Walkable,
     }
