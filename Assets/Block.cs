@@ -24,7 +24,7 @@ public class Block : MonoBehaviour
 
     public void Demolish()
     {
-        if (state is State.Persistent)
+        if (state is State.Indestructible)
             return;
 
         if (state is State.SlightlyDamaged)
@@ -55,7 +55,7 @@ public class Block : MonoBehaviour
 
     public enum State
     {
-        Persistent,
+        Indestructible,
         Solid,
         Walkable,
         SlightlyDamaged,

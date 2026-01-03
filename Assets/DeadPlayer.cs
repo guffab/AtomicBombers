@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DeadPlayer : MonoBehaviour
@@ -12,7 +13,14 @@ public class DeadPlayer : MonoBehaviour
         if (other.gameObject.TryGetComponent<Player>(out var player))
         {
             player.Eat(this);
-            Destroy(gameObject);
+            Remove();
         }
     }
+    
+    public void Remove()
+    {
+        GridSystem.Current.Remove(gameObject);
+        Destroy(gameObject);
+    }
+
 }

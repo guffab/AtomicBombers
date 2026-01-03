@@ -31,8 +31,14 @@ public class Consumable : MonoBehaviour
         if (other.gameObject.TryGetComponent<Player>(out var player))
         {
             player.Consume(Type);
-            Destroy(gameObject);
+            Remove();
         }
+    }
+
+    public void Remove()
+    {
+        GridSystem.Current.Remove(gameObject);
+        Destroy(gameObject);
     }
 
     public enum Kind

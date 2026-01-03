@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -4376935434461854362}
   - component: {fileID: 4966062538919042812}
   - component: {fileID: 8579613669758394019}
-  - component: {fileID: 8033796557555371071}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -104,7 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
-  speed: 1
+  speed: 3
   sprites:
   - {fileID: -2497072586544585265, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
   - {fileID: -670276026, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
@@ -397,6 +396,8 @@ MonoBehaviour:
   appearance: 0
   animationFrameTime: 0.15
   DeadPlayerPrefab: {fileID: 5033437067231753437, guid: 6d4436d066ed4a6ef98f5e1d124f5abf, type: 3}
+  ExplodingBombPrefab: {fileID: 7894608927123560015, guid: 2018226b601300c3990ba2e6bb029596, type: 3}
+  ExplodingAtomicBombPrefab: {fileID: 5084145037778328107, guid: 5c8ccc4cfb37f3b36ba2e2006a4150ba, type: 3}
 --- !u!50 &4966062538919042812
 Rigidbody2D:
   serializedVersion: 5
@@ -405,7 +406,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 432050885274530321}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -470,16 +471,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.28, y: 0.28}
   m_EdgeRadius: 0
---- !u!114 &8033796557555371071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 432050885274530321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e236f63bcae8e843daa9aae781ffaa96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Current: {x: 0, y: 0}

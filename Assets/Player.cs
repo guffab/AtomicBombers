@@ -1,15 +1,22 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class Player : MonoBehaviour
 {
+    private static WaitForSeconds shortWait = new WaitForSeconds(.05f);//Unity suggests to cache this
+    private static WaitForSeconds longWait = new WaitForSeconds(1.5f);//Unity suggests to cache this
     static readonly System.Random random = new();
     static readonly Appearance[] appearances = new Appearance[] { Appearance.Pacman, Appearance.Immortal, Appearance.Sick, Appearance.Ghost };
-    
+
     const int framesPerAnimation = 3;
     float timer;
-    Vector2 moveInput = new Vector2(0, 0);
+    Vector2Int moveInput = Vector2Int.zero;
+    bool moveCanceled = false;
+    Vector3 targetWorldPos;
     Direction direction;
     InputSystem_Actions actions;
 
@@ -29,6 +36,8 @@ public class Player : MonoBehaviour
     public float animationFrameTime = 0.15f;
 
     public GameObject DeadPlayerPrefab;
+    public GameObject ExplodingBombPrefab;
+    public GameObject ExplodingAtomicBombPrefab;
 
     void Awake()
     {
@@ -38,12 +47,24 @@ public class Player : MonoBehaviour
         moveAction = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
     }
 
+    void Start()
+    {
+        targetWorldPos = GridSystem.Current.ToWorld(GridSystem.Current.GetPosition(gameObject));
+        StartCoroutine(MoveRoutine());
+    }
+
     // called every frame
     void Update()
     {
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            targetWorldPos,
+            speed * Time.deltaTime
+        );
+
         if (moveInput.magnitude > 0)
         {
-            if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
+            if (Math.Abs(moveInput.x) > Math.Abs(moveInput.y))
                 direction = moveInput.x > 0 ? Direction.Right : Direction.Left;
             else
                 direction = moveInput.y > 0 ? Direction.Up : Direction.Down;
@@ -53,17 +74,20 @@ public class Player : MonoBehaviour
         }
     }
 
-    // called at fixed intervals (for physics)
-    void FixedUpdate()
-    {
-        rb.linearVelocity = moveInput * speed;
-    }
-
     void OnEnable()
     {
         moveAction.Enable();
-        moveAction.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        moveAction.canceled += ctx => moveInput = Vector2.zero;
+        moveAction.performed += ctx =>
+        {
+            moveCanceled = false;
+            var rawInput = ctx.ReadValue<Vector2>();
+
+            if (Mathf.Abs(rawInput.x) > Mathf.Abs(rawInput.y))
+                moveInput = new Vector2Int(Math.Sign(rawInput.x), 0);
+            else
+                moveInput = new Vector2Int(0, Math.Sign(rawInput.y));
+        };
+        moveAction.canceled += ctx => moveCanceled = true;
     }
 
     void OnDisable()
@@ -71,6 +95,25 @@ public class Player : MonoBehaviour
         moveAction.Disable();
         var playerStruct = actions.GetType().GetProperty("Player" + playerNumber).GetValue(actions);
         playerStruct.GetType().GetMethod("Disable").Invoke(playerStruct, new object[0]);
+    }
+
+    IEnumerator MoveRoutine()
+    {
+        var grid = GridSystem.Current;
+
+        while (true)
+        {
+            yield return shortWait;
+            if (moveInput.magnitude > 0 && grid.TryMove(this, moveInput))
+            {
+                targetWorldPos = grid.ToWorld(grid.GetPosition(gameObject));
+
+                if (moveCanceled)
+                    moveInput = Vector2Int.zero;
+                else
+                    yield return longWait;
+            }
+        }
     }
 
     void SetCurrentSprite()
@@ -87,7 +130,7 @@ public class Player : MonoBehaviour
     public void Kill()
     {
         var grid = GridSystem.Current;
-        var position = grid.GetPosition(gameObject);
+        var position = grid.Remove(gameObject);
         var deadPlayer = Instantiate(DeadPlayerPrefab, grid.ToWorld(position), Quaternion.identity);
         grid.Add(deadPlayer, position);
 

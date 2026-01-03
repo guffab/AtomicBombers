@@ -102,6 +102,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""PlantBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba62d6c7-a6f6-467d-8a26-e2afa9087441"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""8d5c44ca-e778-4a07-9685-1f8b2a59dc90"",
@@ -493,6 +502,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""418a50d9-5eee-4073-8820-fc150966cf25"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlantBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -508,6 +528,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PlantBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb75268d-7787-48d2-be13-b0b08f538e2b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -565,6 +594,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51550a74-47e2-4c14-885d-f3bc967b27fd"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlantBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -580,6 +620,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PlantBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""35a20139-7f85-44e5-b56e-99385b88bbfd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -637,6 +686,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c66061d0-570c-45a3-88f9-6d80ea64b8b5"",
+                    ""path"": ""<Keyboard>/period"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlantBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -652,6 +712,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PlantBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""6d9223d3-7a8f-4c6c-a127-43a75069fceb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -709,6 +778,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""47f2d0e0-eb04-4180-9344-7a8d53aa6cd8"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlantBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1295,6 +1375,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Player1
         m_Player1 = asset.FindActionMap("Player1", throwIfNotFound: true);
         m_Player1_Move = m_Player1.FindAction("Move", throwIfNotFound: true);
+        m_Player1_PlantBomb = m_Player1.FindAction("PlantBomb", throwIfNotFound: true);
         m_Player1_Look = m_Player1.FindAction("Look", throwIfNotFound: true);
         m_Player1_Attack = m_Player1.FindAction("Attack", throwIfNotFound: true);
         m_Player1_Interact = m_Player1.FindAction("Interact", throwIfNotFound: true);
@@ -1306,12 +1387,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Player2
         m_Player2 = asset.FindActionMap("Player2", throwIfNotFound: true);
         m_Player2_Move = m_Player2.FindAction("Move", throwIfNotFound: true);
+        m_Player2_PlantBomb = m_Player2.FindAction("PlantBomb", throwIfNotFound: true);
         // Player3
         m_Player3 = asset.FindActionMap("Player3", throwIfNotFound: true);
         m_Player3_Move = m_Player3.FindAction("Move", throwIfNotFound: true);
+        m_Player3_PlantBomb = m_Player3.FindAction("PlantBomb", throwIfNotFound: true);
         // Player4
         m_Player4 = asset.FindActionMap("Player4", throwIfNotFound: true);
         m_Player4_Move = m_Player4.FindAction("Move", throwIfNotFound: true);
+        m_Player4_PlantBomb = m_Player4.FindAction("PlantBomb", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1409,6 +1493,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player1;
     private List<IPlayer1Actions> m_Player1ActionsCallbackInterfaces = new List<IPlayer1Actions>();
     private readonly InputAction m_Player1_Move;
+    private readonly InputAction m_Player1_PlantBomb;
     private readonly InputAction m_Player1_Look;
     private readonly InputAction m_Player1_Attack;
     private readonly InputAction m_Player1_Interact;
@@ -1432,6 +1517,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player1/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player1_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player1/PlantBomb".
+        /// </summary>
+        public InputAction @PlantBomb => m_Wrapper.m_Player1_PlantBomb;
         /// <summary>
         /// Provides access to the underlying input action "Player1/Look".
         /// </summary>
@@ -1493,6 +1582,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @PlantBomb.started += instance.OnPlantBomb;
+            @PlantBomb.performed += instance.OnPlantBomb;
+            @PlantBomb.canceled += instance.OnPlantBomb;
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
@@ -1531,6 +1623,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @PlantBomb.started -= instance.OnPlantBomb;
+            @PlantBomb.performed -= instance.OnPlantBomb;
+            @PlantBomb.canceled -= instance.OnPlantBomb;
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
@@ -1593,6 +1688,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player2;
     private List<IPlayer2Actions> m_Player2ActionsCallbackInterfaces = new List<IPlayer2Actions>();
     private readonly InputAction m_Player2_Move;
+    private readonly InputAction m_Player2_PlantBomb;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player2".
     /// </summary>
@@ -1608,6 +1704,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player2/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player2_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player2/PlantBomb".
+        /// </summary>
+        public InputAction @PlantBomb => m_Wrapper.m_Player2_PlantBomb;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1637,6 +1737,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @PlantBomb.started += instance.OnPlantBomb;
+            @PlantBomb.performed += instance.OnPlantBomb;
+            @PlantBomb.canceled += instance.OnPlantBomb;
         }
 
         /// <summary>
@@ -1651,6 +1754,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @PlantBomb.started -= instance.OnPlantBomb;
+            @PlantBomb.performed -= instance.OnPlantBomb;
+            @PlantBomb.canceled -= instance.OnPlantBomb;
         }
 
         /// <summary>
@@ -1689,6 +1795,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player3;
     private List<IPlayer3Actions> m_Player3ActionsCallbackInterfaces = new List<IPlayer3Actions>();
     private readonly InputAction m_Player3_Move;
+    private readonly InputAction m_Player3_PlantBomb;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player3".
     /// </summary>
@@ -1704,6 +1811,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player3/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player3_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player3/PlantBomb".
+        /// </summary>
+        public InputAction @PlantBomb => m_Wrapper.m_Player3_PlantBomb;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1733,6 +1844,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @PlantBomb.started += instance.OnPlantBomb;
+            @PlantBomb.performed += instance.OnPlantBomb;
+            @PlantBomb.canceled += instance.OnPlantBomb;
         }
 
         /// <summary>
@@ -1747,6 +1861,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @PlantBomb.started -= instance.OnPlantBomb;
+            @PlantBomb.performed -= instance.OnPlantBomb;
+            @PlantBomb.canceled -= instance.OnPlantBomb;
         }
 
         /// <summary>
@@ -1785,6 +1902,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player4;
     private List<IPlayer4Actions> m_Player4ActionsCallbackInterfaces = new List<IPlayer4Actions>();
     private readonly InputAction m_Player4_Move;
+    private readonly InputAction m_Player4_PlantBomb;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player4".
     /// </summary>
@@ -1800,6 +1918,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player4/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player4_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player4/PlantBomb".
+        /// </summary>
+        public InputAction @PlantBomb => m_Wrapper.m_Player4_PlantBomb;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1829,6 +1951,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @PlantBomb.started += instance.OnPlantBomb;
+            @PlantBomb.performed += instance.OnPlantBomb;
+            @PlantBomb.canceled += instance.OnPlantBomb;
         }
 
         /// <summary>
@@ -1843,6 +1968,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @PlantBomb.started -= instance.OnPlantBomb;
+            @PlantBomb.performed -= instance.OnPlantBomb;
+            @PlantBomb.canceled -= instance.OnPlantBomb;
         }
 
         /// <summary>
@@ -2151,6 +2279,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "PlantBomb" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPlantBomb(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2221,6 +2356,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PlantBomb" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPlantBomb(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player3" which allows adding and removing callbacks.
@@ -2236,6 +2378,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PlantBomb" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPlantBomb(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player4" which allows adding and removing callbacks.
@@ -2251,6 +2400,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PlantBomb" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPlantBomb(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

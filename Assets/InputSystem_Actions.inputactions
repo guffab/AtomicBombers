@@ -16,6 +16,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "PlantBomb",
+                    "type": "Button",
+                    "id": "ba62d6c7-a6f6-467d-8a26-e2afa9087441",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Look",
                     "type": "Value",
                     "id": "8d5c44ca-e778-4a07-9685-1f8b2a59dc90",
@@ -407,6 +416,17 @@
                     "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "418a50d9-5eee-4073-8820-fc150966cf25",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PlantBomb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -422,6 +442,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PlantBomb",
+                    "type": "Button",
+                    "id": "fb75268d-7787-48d2-be13-b0b08f538e2b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -479,6 +508,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "51550a74-47e2-4c14-885d-f3bc967b27fd",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PlantBomb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -494,6 +534,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PlantBomb",
+                    "type": "Button",
+                    "id": "35a20139-7f85-44e5-b56e-99385b88bbfd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -551,6 +600,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c66061d0-570c-45a3-88f9-6d80ea64b8b5",
+                    "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PlantBomb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -566,6 +626,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PlantBomb",
+                    "type": "Button",
+                    "id": "6d9223d3-7a8f-4c6c-a127-43a75069fceb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -623,6 +692,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "47f2d0e0-eb04-4180-9344-7a8d53aa6cd8",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PlantBomb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

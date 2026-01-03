@@ -1,15 +1,17 @@
 {
-  "ItemProbabilities": 91111111,
-  "BlockStyle": -11,
+  "ItemProbabilities": 91011111,
+  "BlockStyle": 3,
   "Fill": true,
   "Layout": {
     "3,1": "Player1",
-    "4,8": "PersistentBlock",
+    "4,8": "IndestructibleBlock",
     "3,8": "DamagedBlock",
     "2,8": "SolidBlock",
     "1,8": "WalkableBlock",
     "2,1": "Player3",
     "3,2": "Mine",
+    "3,3": "SolidBlock",
+    "3,4": "SolidBlock",
     "4,2": "Mine",
     "5,2": "Mine",
     "6,2": "Mine",
@@ -27,6 +29,7 @@
     "4,1": "Pacman"
   },
   "HiddenItems": {
-
+    "3,3": "Ghost",
+    "3,4": "Ghost"
   }
 }

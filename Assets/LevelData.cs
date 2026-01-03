@@ -74,7 +74,7 @@ public record LevelData(long ItemProbabilities, int BlockStyle, bool Fill, Dicti
     public enum GridElement
     {
         //blocks
-        PersistentBlock = -9,
+        IndestructibleBlock = -9,
         DamagedBlock = -8,
         SolidBlock = -7,
         WalkableBlock = -6,

@@ -26,7 +26,10 @@ public class Explosion : MonoBehaviour
                     block.Demolish();
 
                 else if (element.TryGetComponent<Consumable>(out var consumable))
-                    Destroy(consumable.gameObject);
+                    consumable.Remove();
+
+                else if (element.TryGetComponent<DeadPlayer>(out var deadPlayer))
+                    deadPlayer.Remove();
 
                 else
                     Debug.Log($"Unhandled explosion on {element.name}");
@@ -34,12 +37,14 @@ public class Explosion : MonoBehaviour
         }
     }
 
+    //referenced by animation
     public void Hide()
     {
         GetComponent<Renderer>().enabled = false;
         GridSystem.Current.Remove(gameObject);
     }
 
+    //referenced by animation
     public void DestroyObject()
     {
         Destroy(gameObject);

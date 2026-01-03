@@ -14,7 +14,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector] public LevelData Current => Levels[currentIndex];
 
     //prefabs
-    public GameObject PersistentBlockPrefab;
+    public GameObject IndestructibleBlockPrefab;
     public GameObject DamagedBlockPrefab;
     public GameObject SolidBlockPrefab;
     public GameObject WalkableBlockPrefab;
@@ -65,7 +65,7 @@ public class LevelManager : MonoBehaviour
     {
         var itemToInstantiate = gridElement switch
         {
-            LevelData.GridElement.PersistentBlock => PersistentBlockPrefab,
+            LevelData.GridElement.IndestructibleBlock => IndestructibleBlockPrefab,
             LevelData.GridElement.DamagedBlock => DamagedBlockPrefab,
             LevelData.GridElement.SolidBlock => SolidBlockPrefab,
             LevelData.GridElement.WalkableBlock => WalkableBlockPrefab,
