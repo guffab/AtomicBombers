@@ -9,13 +9,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -5805489936443653961, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
+      propertyPath: state
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -5805489936443653961, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: CurrentState
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 89808019226992972, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1445977080, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+      objectReference: {fileID: -2544099004350548168, guid: 4e43c7a117c8022f2936370662d9b3e3, type: 3}
     - target: {fileID: 2290138766393515516, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Name
       value: WalkableBlock

@@ -9,11 +9,11 @@ using UnityEngine;
 /// Defines how a level is structured.
 /// </summary>
 /// <param name="Consumables">Each 0 or 1 entry defines if a consumable is available or not. TODO: allow 0-9 to define likeliness of each item?</param>
-/// <param name="BlockType">Controls the visual appearance of the level.</param>
+/// <param name="BlockStyle">Controls the visual appearance of the level.</param>
 /// <param name="Fill">Wether or not the level grid should be randomly filled with blocks for grid points not defined in the <see cref="Layout"/>.</param>
 /// <param name="Layout">A coordinate+item pair. Example: { "1,1": "Player1", "17,3": "Explosive" }</param>
 /// <param name="HiddenItems">A coordinate+item pair for items that are only revealed after exploding a block.</param>
-public record LevelData(long ItemProbabilities, int BlockType, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
+public record LevelData(long ItemProbabilities, int BlockStyle, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
 {
     static readonly System.Random random = new();
     List<GridElement> AvailableItems;

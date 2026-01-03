@@ -1,22 +1,45 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Block : MonoBehaviour
 {
-    public State CurrentState;
+    public Sprite[] sprites;
+    public State state;
+    public int style;
+
+    SpriteRenderer sr;
+
+    void Start()
+    {
+        sr = GetComponent<SpriteRenderer>();
+        SetStyle();
+    }
+
+    private void SetStyle()
+    {
+        int index = (int)state + 6 * (Math.Min(Math.Abs(style), 10) - 1);
+        sr.sprite = sprites[index];
+    }
 
     public void Demolish()
     {
-        if (CurrentState is State.Persistent)
+        if (state is State.Persistent)
             return;
 
-        if (CurrentState is State.SlightlyDamaged)
-            CurrentState = State.MediumDamaged;
+        if (state is State.SlightlyDamaged)
+        {
+            state = State.MediumDamaged;
+            SetStyle();
+        }
 
-        else if (CurrentState is State.MediumDamaged)
-            CurrentState = State.HeavyDamaged;
+        else if (state is State.MediumDamaged)
+        {
+            state = State.HeavyDamaged;
+            SetStyle();
+        }
 
-        else if (CurrentState is State.HeavyDamaged)
+        else if (state is State.HeavyDamaged)
         {
             GridSystem.Current.Remove(gameObject);
             Destroy(gameObject);
@@ -30,25 +53,13 @@ public class Block : MonoBehaviour
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public enum State
     {
         Persistent,
+        Solid,
+        Walkable,
         SlightlyDamaged,
         MediumDamaged,
         HeavyDamaged,
-        Solid,
-        Walkable,
     }
 }

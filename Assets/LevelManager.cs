@@ -92,6 +92,9 @@ public class LevelManager : MonoBehaviour
             var position = GridSystem.Current.ToWorld(gridPos);
             var newObject = Instantiate(itemToInstantiate, position, Quaternion.identity);
             GridSystem.Current.Add(newObject, gridPos);
+
+            if (newObject.TryGetComponent<Block>(out var block))
+                block.style = Current.BlockStyle;
         }
     }
 
