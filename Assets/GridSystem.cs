@@ -27,12 +27,22 @@ public class GridSystem
 
     public bool IsOccupied(Vector2Int v, out List<GameObject> objects)
     {
-        return GridToObject.TryGetValue(v, out objects);
+        bool success = GridToObject.TryGetValue(v, out objects);
+        objects ??= new();
+        return success;
     }
 
     public Vector2Int GetPosition(GameObject g)
     {
         return ObjectToGrid[g];
+    }
+
+    public List<GameObject> GetObjectsAtSamePlace(GameObject g)
+    {
+        if (GridToObject.TryGetValue(ObjectToGrid[g], out var allObjects))
+            return allObjects.Where(x => x != g).ToList();
+        else
+            return new();
     }
 
     public bool TryMove(Player player, Vector2Int direction)

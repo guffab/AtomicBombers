@@ -5,6 +5,7 @@ public class Mine : ExplosiveBase
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        Explode(1);
+        if (other.TryGetComponent<Player>(out var player))
+            Explode(player.Strength);
     }
 }

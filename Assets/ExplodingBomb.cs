@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class ExplodingBomb : ExplosiveBase
 {
-    public int Strength;
-    public float Delay; 
+    public int strength;
+    public float delay;
+    public Kind kind;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(ExecuteAfterWait(Delay));
+        StartCoroutine(ExecuteAfterWait(delay));
     }
 
     IEnumerator ExecuteAfterWait(float duration)
     {
         yield return new WaitForSeconds(duration);
-        Explode(Strength);
+        Explode(strength, kind is Kind.Atomic);
+    }
+
+    public enum Kind
+    {
+        Normal,
+        Atomic,
     }
 }
 
@@ -24,7 +31,7 @@ public abstract class ExplosiveBase : MonoBehaviour
 {
     public GameObject ExplosionPrefab;
 
-    public void Explode(int strength)
+    public void Explode(int strength, bool unstoppable = false)
     {
         var grid = GridSystem.Current;
         var currentPos = grid.Remove(gameObject);
@@ -49,6 +56,15 @@ public abstract class ExplosiveBase : MonoBehaviour
 
             if (grid.IsOccupied(position, out var objects) && objects.Any(x => x != null && x.TryGetComponent<Explosion>(out _)))
                 return;
+
+            foreach (var item in objects)
+            {
+                if (item.TryGetComponent<ExplodingBomb>(out var explodingBomb))
+                {
+                    explodingBomb.Explode(strength, unstoppable);
+                    return;
+                }
+            }
             
             var explosion = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
             explosion.GetComponent<Explosion>().Strength = strength;
