@@ -52,7 +52,7 @@ public class GridSystem
                 return true;
 
             return collisions.All(x => !x.TryGetComponent<ExplodingBomb>(out _)) &&
-                   collisions.All(x => !x.TryGetComponent<Block>(out var block) || block.state is Block.State.Walkable);
+                   collisions.All(x => !x.TryGetComponent<Block>(out var block) || block.state is Block.State.Walkable || (player.appearance is Player.Appearance.Ghost && block.state is Block.State.Solid));
         }
     }
 

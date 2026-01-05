@@ -7,15 +7,21 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Player : MonoBehaviour
 {
-    private static WaitForSeconds shortWait = new WaitForSeconds(.05f);//Unity suggests to cache this
-    private static WaitForSeconds longWait = new WaitForSeconds(1.5f);//Unity suggests to cache this
     static readonly System.Random random = new();
     static readonly Appearance[] appearances = new Appearance[] { Appearance.Pacman, Appearance.Immortal, Appearance.Sick, Appearance.Ghost };
 
     const int framesPerAnimation = 3;
     float timer;
     Vector2Int moveInput = Vector2Int.zero;
-    bool moveCanceled = false;
+
+    const float moveFast = 3.5f;
+    const float moveSlow = 1f;
+
+    bool isMoving = false;
+    Vector2Int bufferedDirection = Vector2Int.zero;
+    float bufferTime = 0.01f;
+    float bufferTimer = 0f;
+
     Vector3 targetWorldPos;
     Direction direction;
     InputSystem_Actions actions;
@@ -30,7 +36,7 @@ public class Player : MonoBehaviour
     InputAction moveAction;
 
     public int playerNumber;
-    public float speed = 1f;
+    public float speed = 2f;
     public Sprite[] sprites;
     public Appearance appearance;
     public float animationFrameTime = 0.15f;
@@ -50,20 +56,16 @@ public class Player : MonoBehaviour
     void Start()
     {
         targetWorldPos = GridSystem.Current.ToWorld(GridSystem.Current.GetPosition(gameObject));
-        StartCoroutine(MoveRoutine());
     }
 
     // called every frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            targetWorldPos,
-            speed * Time.deltaTime
-        );
-
-        if (moveInput.magnitude > 0)
+        if (moveInput != Vector2Int.zero)
         {
+            bufferedDirection = moveInput;
+            bufferTimer = bufferTime;
+
             if (Math.Abs(moveInput.x) > Math.Abs(moveInput.y))
                 direction = moveInput.x > 0 ? Direction.Right : Direction.Left;
             else
@@ -72,6 +74,38 @@ public class Player : MonoBehaviour
             timer += Time.deltaTime;
             SetCurrentSprite();
         }
+
+        if (!isMoving && bufferedDirection != Vector2Int.zero)
+        {
+            var grid = GridSystem.Current;
+
+            if (grid.TryMove(this, bufferedDirection))
+            {
+                isMoving = true;
+                targetWorldPos = grid.ToWorld(grid.GetPosition(gameObject));
+                bufferedDirection = Vector2Int.zero;
+            }
+        }
+
+        if (bufferTimer > 0f)
+            bufferTimer -= Time.deltaTime;
+        else
+            bufferedDirection = Vector2Int.zero;
+    }
+
+    void LateUpdate()
+    {
+        if (!isMoving)
+            return;
+
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            targetWorldPos,
+            speed * Time.deltaTime
+        );
+
+        if (transform.position == targetWorldPos)
+            isMoving = false;
     }
 
     void OnEnable()
@@ -79,7 +113,6 @@ public class Player : MonoBehaviour
         moveAction.Enable();
         moveAction.performed += ctx =>
         {
-            moveCanceled = false;
             var rawInput = ctx.ReadValue<Vector2>();
 
             if (Mathf.Abs(rawInput.x) > Mathf.Abs(rawInput.y))
@@ -87,7 +120,7 @@ public class Player : MonoBehaviour
             else
                 moveInput = new Vector2Int(0, Math.Sign(rawInput.y));
         };
-        moveAction.canceled += ctx => moveCanceled = true;
+        moveAction.canceled += ctx => moveInput = Vector2Int.zero;
     }
 
     void OnDisable()
@@ -95,25 +128,6 @@ public class Player : MonoBehaviour
         moveAction.Disable();
         var playerStruct = actions.GetType().GetProperty("Player" + playerNumber).GetValue(actions);
         playerStruct.GetType().GetMethod("Disable").Invoke(playerStruct, new object[0]);
-    }
-
-    IEnumerator MoveRoutine()
-    {
-        var grid = GridSystem.Current;
-
-        while (true)
-        {
-            yield return shortWait;
-            if (moveInput.magnitude > 0 && grid.TryMove(this, moveInput))
-            {
-                targetWorldPos = grid.ToWorld(grid.GetPosition(gameObject));
-
-                if (moveCanceled)
-                    moveInput = Vector2Int.zero;
-                else
-                    yield return longWait;
-            }
-        }
     }
 
     void SetCurrentSprite()
@@ -129,6 +143,9 @@ public class Player : MonoBehaviour
 
     public void Kill()
     {
+        if (appearance is Appearance.Immortal)
+            return;
+
         var grid = GridSystem.Current;
         var position = grid.Remove(gameObject);
         var deadPlayer = Instantiate(DeadPlayerPrefab, grid.ToWorld(position), Quaternion.identity);
