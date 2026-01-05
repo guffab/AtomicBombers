@@ -37,39 +37,50 @@ public abstract class ExplosiveBase : MonoBehaviour
         var currentPos = grid.Remove(gameObject);
 
         //spawn explosions unless already present
-        InstantiateExplosion(grid, currentPos, strength);
+        TryInstantiateExplosion(grid, currentPos, strength, unstoppable);
+
         for (int i = 1; i <= strength; i++)
-        {
-            #warning stop at hard wall per direction
-            //TODO: how to stop in one direction if a hard wall is hit? 
-            InstantiateExplosion(grid, currentPos + (Vector2Int.up * i), strength);
-            InstantiateExplosion(grid, currentPos + (Vector2Int.down * i), strength);
-            InstantiateExplosion(grid, currentPos + (Vector2Int.left * i), strength);
-            InstantiateExplosion(grid, currentPos + (Vector2Int.right * i), strength);
-        }
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.up * i), strength, unstoppable))
+                break;
+
+        for (int i = 1; i <= strength; i++)
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.down * i), strength, unstoppable))
+                break;
+
+        for (int i = 1; i <= strength; i++)
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.left * i), strength, unstoppable))
+                break;
+
+        for (int i = 1; i <= strength; i++)
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.right * i), strength, unstoppable))
+                break;
+
         Destroy(gameObject);
+    }
 
-        void InstantiateExplosion(GridSystem grid, Vector2Int position, int strength)
+    private bool TryInstantiateExplosion(GridSystem grid, Vector2Int position, int strength, bool unstoppable)
+    {
+        if (grid.IsOccupied(position, out var objects) && objects.Any(x => x != null && x.TryGetComponent<Explosion>(out _)))
+            return true; //in case a horizontal explosion meets a vertical
+
+        foreach (var item in objects)
         {
-            if ((uint)position.x > grid.GridDimensions.x || (uint)position.y > grid.GridDimensions.y)
-                return;
-
-            if (grid.IsOccupied(position, out var objects) && objects.Any(x => x != null && x.TryGetComponent<Explosion>(out _)))
-                return;
-
-            foreach (var item in objects)
+            //ignite exisiting bomb instead of placing new one for bigger booom
+            if (item.TryGetComponent<ExplodingBomb>(out var explodingBomb))
             {
-                if (item.TryGetComponent<ExplodingBomb>(out var explodingBomb))
-                {
-                    explodingBomb.Explode(strength, unstoppable);
-                    return;
-                }
+                explodingBomb.Explode(strength, unstoppable);
+                return false;
             }
-            
-            var explosion = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
-            explosion.GetComponent<Explosion>().Strength = strength;
 
-            grid.Add(explosion, position);
+            //"heavy" walls stop all explosions
+            else if (item.TryGetComponent<Block>(out var block) && block.state is Block.State.Indestructible)
+                return false;
         }
+
+        var explosion = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
+        explosion.GetComponent<Explosion>().Strength = strength;
+
+        grid.Add(explosion, position);
+        return true;
     }
 }

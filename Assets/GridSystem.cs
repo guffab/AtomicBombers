@@ -8,16 +8,17 @@ public class GridSystem
     private Dictionary<GameObject, Vector2Int> ObjectToGrid = new();
 
     [HideInInspector] public static GridSystem Current;
-    [HideInInspector] public Vector2Int GridDimensions { get; }
+    [HideInInspector] public Vector2Int Dimensions { get; }
 
     public GridSystem(Vector2Int gridDimensions)
     {
         Current = this;
-        GridDimensions = gridDimensions;
+        Dimensions = gridDimensions;
     }
 
     public void Add(GameObject g, Vector2Int v)
     {
+        v = Wrap(v);
         ObjectToGrid[g] = v;
         if (GridToObject.TryGetValue(v, out var list))
             list.Add(g);
@@ -27,7 +28,7 @@ public class GridSystem
 
     public bool IsOccupied(Vector2Int v, out List<GameObject> objects)
     {
-        bool success = GridToObject.TryGetValue(v, out objects);
+        bool success = GridToObject.TryGetValue(Wrap(v), out objects);
         objects ??= new();
         return success;
     }
@@ -47,7 +48,7 @@ public class GridSystem
 
     public bool TryMove(Player player, Vector2Int direction)
     {
-        var newPos = GetPosition(player.gameObject) + direction;
+        var newPos = Wrap(GetPosition(player.gameObject) + direction);
         if (CanMove(player))
         {
             Remove(player.gameObject);
@@ -62,7 +63,8 @@ public class GridSystem
                 return true;
 
             return collisions.All(x => !x.TryGetComponent<ExplodingBomb>(out _)) &&
-                   collisions.All(x => !x.TryGetComponent<Block>(out var block) || block.state is Block.State.Walkable || (player.appearance is Player.Appearance.Ghost && block.state is Block.State.Solid));
+                   collisions.All(x => !x.TryGetComponent<Block>(out var block) || 
+                   block.state is Block.State.Walkable || (player.appearance is Player.Appearance.Ghost && block.state is Block.State.Solid));
         }
     }
 
@@ -78,9 +80,16 @@ public class GridSystem
 
     public Vector3 ToWorld(Vector2Int v)
     {
+        v = Wrap(v);
         var screenPos = new Vector3(v.x * 28, v.y * 28, 10);
         var worldPos = Camera.main.ScreenToWorldPoint(screenPos);
         worldPos.y -= .12f; //not sure why all coordinates are wrong by this factor
         return worldPos;
+    }
+
+    public Vector2Int Wrap(Vector2Int raw)
+    {
+        return new Vector2Int((((raw.x - 1) % Dimensions.x) + Dimensions.x) % Dimensions.x + 1, 
+                              (((raw.y - 1) % Dimensions.y) + Dimensions.y) % Dimensions.y + 1);
     }
 }

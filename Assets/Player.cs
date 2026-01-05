@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     float bufferTime = 0.01f;
     float bufferTimer = 0f;
 
+    Vector2Int lastGridPos;
     Vector3 targetWorldPos;
     Direction direction;
     InputSystem_Actions actions;
@@ -61,7 +62,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        targetWorldPos = GridSystem.Current.ToWorld(GridSystem.Current.GetPosition(gameObject));
+        lastGridPos = Grid.GetPosition(gameObject);
+        targetWorldPos = Grid.ToWorld(lastGridPos);
     }
 
     // called every frame
@@ -69,12 +71,13 @@ public class Player : MonoBehaviour
     {
         if (plantBomb)
         {
-            if (Grid.GetObjectsAtSamePlace(gameObject).All(x => !x.TryGetComponent<ExplodingBomb>(out _) && !x.TryGetComponent<Block>(out _)))
+            Grid.IsOccupied(lastGridPos, out var objects);
+            if (objects.All(x => !x.TryGetComponent<ExplodingBomb>(out _) && !x.TryGetComponent<Block>(out _)))
             {
                 var bombPrefab = AtomicBombs > 0 ? ExplodingAtomicBombPrefab : ExplodingBombPrefab;
-                var bombObject = Instantiate(bombPrefab, Grid.ToWorld(Grid.GetPosition(gameObject)), Quaternion.identity);
+                var bombObject = Instantiate(bombPrefab, Grid.ToWorld(lastGridPos), Quaternion.identity);
                 Grid.Add(bombObject, Grid.GetPosition(gameObject));
-                
+
                 var bomb = bombObject.GetComponent<ExplodingBomb>();
                 bomb.strength = Strength;
                 bomb.delay = 1f;
@@ -121,14 +124,21 @@ public class Player : MonoBehaviour
         if (!isMoving)
             return;
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            targetWorldPos,
-            speed * Time.deltaTime
-        );
+        //when jumping to the other side of the screen, an animation looks horrible and confusing
+        if ((transform.position - targetWorldPos).magnitude > 1f)
+            transform.position = targetWorldPos;
+        else
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                targetWorldPos,
+                speed * Time.deltaTime
+            );
 
         if (transform.position == targetWorldPos)
+        {
             isMoving = false;
+            lastGridPos = Grid.GetPosition(gameObject);
+        }
     }
 
     void OnEnable()
@@ -161,7 +171,7 @@ public class Player : MonoBehaviour
     {
         if (!collision.gameObject.TryGetComponent<Player>(out var other))
             return;
-        
+
         if (appearance is Appearance.Pacman && other.appearance is not Appearance.Pacman or Appearance.Immortal)
         {
             if (other.playerNumber == this.playerNumber) //for when level spawns same player multiple times
