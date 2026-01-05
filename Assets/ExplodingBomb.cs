@@ -72,15 +72,24 @@ public abstract class ExplosiveBase : MonoBehaviour
                 return false;
             }
 
-            //"heavy" walls stop all explosions
-            else if (item.TryGetComponent<Block>(out var block) && block.state is Block.State.Indestructible)
-                return false;
+            //"heavy" walls stop explosions
+            else if (item.TryGetComponent<Block>(out var block))
+            {
+                //TODO: stop explosions unless this is an atomic/unstoppable bomb
+                SpawnExplosion(grid, position, strength);
+                return block.state is Block.State.Solid or Block.State.Walkable or Block.State.HeavyDamaged;
+            }
         }
 
-        var explosion = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
-        explosion.GetComponent<Explosion>().Strength = strength;
-
-        grid.Add(explosion, position);
+        SpawnExplosion(grid, position, strength);
         return true;
+
+        void SpawnExplosion(GridSystem grid, Vector2Int position, int strength)
+        {
+            var explosion = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
+            explosion.GetComponent<Explosion>().Strength = strength;
+
+            grid.Add(explosion, position);
+        }
     }
 }

@@ -512,7 +512,7 @@
                 {
                     "name": "",
                     "id": "51550a74-47e2-4c14-885d-f3bc967b27fd",
-                    "path": "<Keyboard>/0",
+                    "path": "<Keyboard>/rightCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
