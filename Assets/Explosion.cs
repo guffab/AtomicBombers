@@ -5,43 +5,50 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     public int Strength;
+    GridSystem Grid => GridSystem.Current;
+    
+    bool hasKilledPlayer = false;
 
     void Start()
     {
-        var pos = GridSystem.Current.GetPosition(gameObject);
-        if (GridSystem.Current.IsOccupied(pos, out var elements))
+        foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
         {
-            foreach (var element in elements.ToList())
+            if (element == null || element.TryGetComponent<Explosion>(out _))
+                continue;
+
+            if (element.TryGetComponent<ExplosiveBase>(out var mine))
+                mine.Explode(Strength /*plus some small invisible but hearable delay*/);
+
+            else if (element.TryGetComponent<Player>(out var player))
             {
-                if (element == null || element.TryGetComponent<Explosion>(out _))
-                    continue;
-                
-                if (element.TryGetComponent<Mine>(out var mine))
-                    mine.Explode(Strength);
-                
-                else if (element.TryGetComponent<Player>(out var player))
-                    player.Kill();
-
-                else if (element.TryGetComponent<Block>(out var block))
-                    block.Demolish();
-
-                else if (element.TryGetComponent<Consumable>(out var consumable))
-                    consumable.Remove();
-
-                else if (element.TryGetComponent<DeadPlayer>(out var deadPlayer))
-                    deadPlayer.Remove();
-
-                else
-                    Debug.Log($"Unhandled explosion on {element.name}");
+                player.Kill();
+                hasKilledPlayer = true;
             }
         }
     }
 
+    #warning add a collider so that all bombs are immediately annihilated when nearby
+
     //referenced by animation
     public void Hide()
     {
+        foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
+        {
+            if (element == null || element.TryGetComponent<Explosion>(out _))
+                continue;
+
+            if (element.TryGetComponent<Block>(out var block))
+                block.Demolish();
+
+            else if (element.TryGetComponent<Consumable>(out var consumable))
+                consumable.Remove();
+
+            else if (element.TryGetComponent<DeadPlayer>(out var deadPlayer) && !hasKilledPlayer)
+                deadPlayer.Remove();
+        }
+
         GetComponent<Renderer>().enabled = false;
-        GridSystem.Current.Remove(gameObject);
+        Grid.Remove(gameObject);
     }
 
     //referenced by animation

@@ -251,7 +251,11 @@ public class Player : MonoBehaviour
             Bombs = Math.Min(Bombs + 1, 999_999);
 
         else if (type is Consumable.Kind.Atomicbomb)
+        {
             AtomicBombs = Math.Min(AtomicBombs + 1, 999_999);
+            if (appearance is Appearance.Normal)
+                appearance = Appearance.Atomic;
+        }
 
         else if (type is Consumable.Kind.Megabomb)
         {
