@@ -26,11 +26,12 @@ public class GridSystem
             GridToObject[v] = new List<GameObject> { g };
     }
 
-    public bool IsOccupied(Vector2Int v, out List<GameObject> objects)
+    public List<GameObject> GetObjects(Vector2Int v)
     {
-        bool success = GridToObject.TryGetValue(Wrap(v), out objects);
-        objects ??= new();
-        return success;
+        if (GridToObject.TryGetValue(Wrap(v), out var objects))
+            return objects;
+
+        return new();
     }
 
     public Vector2Int GetPosition(GameObject g)
@@ -59,7 +60,8 @@ public class GridSystem
 
         bool CanMove(Player player)
         {
-            if (!IsOccupied(newPos, out var collisions))
+            var collisions = GetObjects(newPos);
+            if (collisions.Count is 0)
                 return true;
 
             return collisions.All(x => !x.TryGetComponent<ExplodingBomb>(out _)) &&

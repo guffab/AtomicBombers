@@ -5,8 +5,10 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     public int Strength;
+    public bool Unstoppable;
+
     GridSystem Grid => GridSystem.Current;
-    
+
     bool hasKilledPlayer = false;
 
     void Start()
@@ -17,7 +19,7 @@ public class Explosion : MonoBehaviour
                 continue;
 
             if (element.TryGetComponent<ExplosiveBase>(out var mine))
-                mine.Explode(Strength /*plus some small invisible but hearable delay*/);
+                mine.Explode(Strength, Unstoppable);
 
             else if (element.TryGetComponent<Player>(out var player))
             {

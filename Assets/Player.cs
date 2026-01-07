@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
     Direction direction;
     InputSystem_Actions actions;
 
+    internal int availableBombs;
+
     public int Strength { get; private set; } = 1;
     public int Bombs { get; private set; } = 1;
     public int AtomicBombs { get; private set; }
@@ -64,21 +66,40 @@ public class Player : MonoBehaviour
     {
         lastGridPos = Grid.GetPosition(gameObject);
         targetWorldPos = Grid.ToWorld(lastGridPos);
+        availableBombs = Bombs;
     }
 
     // called every frame
     void Update()
     {
+        if (appearance is Appearance.Atomic && AtomicBombs < 1)
+        {
+            appearance = Appearance.Normal;
+            SetCurrentSprite();
+        }
+
+        if (appearance is Appearance.Normal && AtomicBombs > 0)
+        {
+            appearance = Appearance.Atomic;
+            SetCurrentSprite();
+        }
+
         if (plantBomb)
         {
-            Grid.IsOccupied(lastGridPos, out var objects);
-            if (objects.All(x => !x.TryGetComponent<ExplodingBomb>(out _) && !x.TryGetComponent<Block>(out _)))
+            var objects = Grid.GetObjects(lastGridPos);
+            if (availableBombs > 0 && objects.All(x => !x.TryGetComponent<ExplodingBomb>(out _) && !x.TryGetComponent<Block>(out _)))
             {
                 var bombPrefab = AtomicBombs > 0 ? ExplodingAtomicBombPrefab : ExplodingBombPrefab;
                 var bombObject = Instantiate(bombPrefab, Grid.ToWorld(lastGridPos), Quaternion.identity);
-                Grid.Add(bombObject, Grid.GetPosition(gameObject));
+                Grid.Add(bombObject, lastGridPos);
+
+                availableBombs--;
+                if (AtomicBombs > 0)
+                    AtomicBombs--;
+
 
                 var bomb = bombObject.GetComponent<ExplodingBomb>();
+                bomb.player = this;
                 bomb.strength = Strength;
                 bomb.delay = 1f;
 
@@ -163,6 +184,7 @@ public class Player : MonoBehaviour
     void OnDisable()
     {
         moveAction.Disable();
+        plantBombAction.Disable();
         var playerStruct = actions.GetType().GetProperty("Player" + playerNumber).GetValue(actions);
         playerStruct.GetType().GetMethod("Disable").Invoke(playerStruct, new object[0]);
     }
@@ -248,7 +270,10 @@ public class Player : MonoBehaviour
             Strength = Math.Min(Strength + 1, 10);
 
         else if (type is Consumable.Kind.Bomb)
-            Bombs = Math.Min(Bombs + 1, 999_999);
+        {
+            Bombs = Math.Min(Bombs + 1, 30);
+            availableBombs = Math.Min(availableBombs + 1, 30);
+        }
 
         else if (type is Consumable.Kind.Atomicbomb)
         {

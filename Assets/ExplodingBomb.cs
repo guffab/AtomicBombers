@@ -8,6 +8,7 @@ public class ExplodingBomb : ExplosiveBase
     public int strength;
     public float delay;
     public Kind kind;
+    internal Player player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,13 +27,19 @@ public class ExplodingBomb : ExplosiveBase
         Normal,
         Atomic,
     }
+
+    public override void Explode(int strength, bool unstoppable)
+    {
+        if (player != null) player.availableBombs++;
+        base.Explode(strength, kind is Kind.Atomic);
+    }
 }
 
 public abstract class ExplosiveBase : MonoBehaviour
 {
     public GameObject ExplosionPrefab;
 
-    public void Explode(int strength, bool unstoppable = false)
+    public virtual void Explode(int strength, bool unstoppable)
     {
         var grid = GridSystem.Current;
         var currentPos = grid.Remove(gameObject);
@@ -61,34 +68,25 @@ public abstract class ExplosiveBase : MonoBehaviour
 
     private bool TryInstantiateExplosion(GridSystem grid, Vector2Int position, int strength, bool unstoppable)
     {
-        grid.IsOccupied(position, out var objects);
+        var objects = grid.GetObjects(position);
         bool isExploding = objects.Any(x => x.TryGetComponent<Explosion>(out _));
 
-        if (!Has<Explosion>(objects)) //prevent doing more damage
+        if (!objects.Have<Explosion>()) //prevent doing more damage
         {
-            var explosion = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
-            explosion.GetComponent<Explosion>().Strength = strength;
-            grid.Add(explosion, position);
+            var explosionObject = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
+            grid.Add(explosionObject, position);
+
+            var explosion = explosionObject.GetComponent<Explosion>();
+            explosion.Strength = strength;
+            explosion.Unstoppable = unstoppable;
         }
 
-        if (Has<Block>(objects, out var block))
+        if (objects.Have<Block>(out var block))
             return unstoppable && block.state is Block.State.Solid or Block.State.Walkable;// or Block.State.HeavyDamaged;
 
         if (unstoppable)
             return true;
         
-        return !Has<Player>(objects) && !Has<Consumable>(objects) && !Has<DeadPlayer>(objects);
-    }
-
-    static bool Has<T>(List<GameObject> objects) where T : MonoBehaviour => objects.Any(x => x.TryGetComponent<T>(out _));
-
-    static bool Has<T>(List<GameObject> objects, out T tout) where T : MonoBehaviour
-    {
-        foreach (var item in objects)
-            if (item.TryGetComponent<T>(out tout))
-                return true;
-
-        tout = default;
-        return false;
+        return !objects.Have<Player>() && !objects.Have<Consumable>() && !objects.Have<DeadPlayer>();
     }
 }

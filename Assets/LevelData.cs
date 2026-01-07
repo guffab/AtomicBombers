@@ -13,17 +13,11 @@ using UnityEngine;
 /// <param name="Fill">Wether or not the level grid should be randomly filled with blocks for grid points not defined in the <see cref="Layout"/>.</param>
 /// <param name="Layout">A coordinate+item pair. Example: { "1,1": "Player1", "17,3": "Explosive" }</param>
 /// <param name="HiddenItems">A coordinate+item pair for items that are only revealed after exploding a block.</param>
-public record LevelData(long ItemProbabilities, int BlockStyle, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
+public record LevelData(string ItemProbabilities, string BlockProbabilities, int BlockStyle, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
 {
     static readonly System.Random random = new();
     List<GridElement> AvailableItems;
-
-    //slight bias towards certain blocks
-    static readonly GridElement[] BiasedBlocks = new GridElement[]
-    {
-        GridElement.WalkableBlock, GridElement.Empty, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.SolidBlock, GridElement.WalkableBlock,
-        GridElement.SolidBlock, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.SolidBlock,
-    };
+    List<GridElement> AvailableBlocks;
 
     /// <summary>
     /// Call at level start.
@@ -37,7 +31,10 @@ public record LevelData(long ItemProbabilities, int BlockStyle, bool Fill, Dicti
             return GridElement.SolidBlock;
 
         if (Fill)
-            return BiasedBlocks[random.Next(BiasedBlocks.Length)];
+        {
+            AvailableBlocks ??= GetAvailableBlocks();
+            return AvailableBlocks[random.Next(AvailableBlocks.Count)];
+        }
 
         return GridElement.Empty;
     }
@@ -56,18 +53,34 @@ public record LevelData(long ItemProbabilities, int BlockStyle, bool Fill, Dicti
 
     private List<GridElement> GetAvailableItems()
     {
-        var regularItems = new GridElement[] { GridElement.Mine, GridElement.Empty, GridElement.Light, GridElement.KeepForce, GridElement.Powder, GridElement.Bomb, GridElement.Pacman, GridElement.Surprise };
-        var availableItems = new List<GridElement>();
+        var items = new GridElement[] { GridElement.Empty, GridElement.Empty, GridElement.Mine, GridElement.Light, GridElement.KeepForce, GridElement.Powder, GridElement.Bomb, GridElement.AtomicBomb, GridElement.Pacman, GridElement.Surprise };
+        var chances = new List<GridElement>();
 
         //treat each entry as a probability
-        var c = ItemProbabilities.ToString();
-        for (int i = 0; i < Math.Min(c.Length, regularItems.Length); i++)
+        var str = ItemProbabilities.ToString();
+        for (int i = 0; i < Math.Min(str.Length, items.Length); i++)
         {
-            var multiplier = int.Parse(c[i].ToString());
-            availableItems.AddRange(Enumerable.Repeat(regularItems[i], multiplier));
+            if (int.TryParse(str[i].ToString(), out int multiplier))
+                chances.AddRange(Enumerable.Repeat(items[i], multiplier));
         }
 
-        return availableItems;
+        return chances;
+    }
+
+    private List<GridElement> GetAvailableBlocks()
+    {
+        var blocks = new GridElement[] { GridElement.IndestructibleBlock, GridElement.DamagedBlock, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.Empty };
+        var chances = new List<GridElement>();
+
+        //treat each entry as a probability
+        var str = BlockProbabilities.ToString();
+        for (int i = 0; i < Math.Min(str.Length, blocks.Length); i++)
+        {
+            if (int.TryParse(str[i].ToString(), out int multiplier))
+                chances.AddRange(Enumerable.Repeat(blocks[i], multiplier));
+        }
+
+        return chances;
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

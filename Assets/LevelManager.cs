@@ -57,6 +57,10 @@ public class LevelManager : MonoBehaviour
 
     public void PlaceNewElement(Vector2Int gridPos)
     {
+        var objects = GridSystem.Current.GetObjects(gridPos);
+        if (objects.Have<Player>() || objects.Have<DeadPlayer>())
+            return;
+
         var gridElement = Current.GetNewItemAt(gridPos);
         PlaceElement(gridElement, gridPos);
     }

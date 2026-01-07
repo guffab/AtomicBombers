@@ -633,7 +633,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""UHJK"",
+                    ""name"": ""IJKL"",
                     ""id"": ""f13fbaa3-e75f-4aed-a3d1-de3d98c4b2a3"",
                     ""path"": ""Dpad"",
                     ""interactions"": """",
@@ -646,7 +646,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""3253df93-0452-4560-ab1f-088eb9a9f161"",
-                    ""path"": ""<Keyboard>/u"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -657,7 +657,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""4c0a4a4e-d09b-403b-9d79-58871373eb59"",
-                    ""path"": ""<Keyboard>/j"",
+                    ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -668,7 +668,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""876435b0-4599-4f01-855b-3312aa98cd57"",
-                    ""path"": ""<Keyboard>/h"",
+                    ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -679,7 +679,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""f52b0963-f90d-4a8e-9157-ff1e89db5405"",
-                    ""path"": ""<Keyboard>/k"",
+                    ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -690,7 +690,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c66061d0-570c-45a3-88f9-6d80ea64b8b5"",
-                    ""path"": ""<Keyboard>/period"",
+                    ""path"": ""<Keyboard>/slash"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
