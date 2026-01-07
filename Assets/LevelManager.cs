@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    static int currentIndex;
+    static int currentIndex = -1;
     static List<LevelData> Levels;
 
     public static LevelManager Instance;

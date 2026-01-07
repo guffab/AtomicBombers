@@ -57,10 +57,9 @@ public record LevelData(string ItemProbabilities, string BlockProbabilities, int
         var chances = new List<GridElement>();
 
         //treat each entry as a probability
-        var str = ItemProbabilities.ToString();
-        for (int i = 0; i < Math.Min(str.Length, items.Length); i++)
+        for (int i = 0; i < Math.Min(ItemProbabilities.ToString().Length, items.Length); i++)
         {
-            if (int.TryParse(str[i].ToString(), out int multiplier))
+            if (int.TryParse(ItemProbabilities.ToString()[i].ToString(), out int multiplier))
                 chances.AddRange(Enumerable.Repeat(items[i], multiplier));
         }
 
@@ -73,10 +72,9 @@ public record LevelData(string ItemProbabilities, string BlockProbabilities, int
         var chances = new List<GridElement>();
 
         //treat each entry as a probability
-        var str = BlockProbabilities.ToString();
-        for (int i = 0; i < Math.Min(str.Length, blocks.Length); i++)
+        for (int i = 0; i < Math.Min(BlockProbabilities.Length, blocks.Length); i++)
         {
-            if (int.TryParse(str[i].ToString(), out int multiplier))
+            if (int.TryParse(BlockProbabilities[i].ToString(), out int multiplier))
                 chances.AddRange(Enumerable.Repeat(blocks[i], multiplier));
         }
 

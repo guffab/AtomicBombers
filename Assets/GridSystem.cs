@@ -83,13 +83,17 @@ public class GridSystem
     public Vector3 ToWorld(Vector2Int v)
     {
         v = Wrap(v);
-        var screenPos = new Vector3(v.x * 28, v.y * 28, 10);
+
+        float scale = Camera.main.pixelHeight / 480f;
+        float offset = Camera.main.pixelWidth / 640f * 2;
+
+        var screenPos = new Vector3((v.x + offset - 1) * 28 * scale, v.y * 28 * scale, 10);
         var worldPos = Camera.main.ScreenToWorldPoint(screenPos);
         worldPos.y -= .12f; //not sure why all coordinates are wrong by this factor
         return worldPos;
     }
 
-    public Vector2Int Wrap(Vector2Int raw)
+    private Vector2Int Wrap(Vector2Int raw)
     {
         return new Vector2Int((((raw.x - 1) % Dimensions.x) + Dimensions.x) % Dimensions.x + 1, 
                               (((raw.y - 1) % Dimensions.y) + Dimensions.y) % Dimensions.y + 1);
