@@ -505,6 +505,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""34e25ee0-2cc2-4388-9138-5728309348de"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlantBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""418a50d9-5eee-4073-8820-fc150966cf25"",
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",

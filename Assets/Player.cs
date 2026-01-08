@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
         actions = new InputSystem_Actions();
         moveAction = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
         plantBombAction = actions.FindAction($"Player{playerNumber}/PlantBomb", throwIfNotFound: true);
+        LevelManager.Register(this);
     }
 
     void Start()
@@ -244,6 +245,7 @@ public class Player : MonoBehaviour
         deadPlayer.AtomicBombs = AtomicBombs;
         deadPlayer.KeepForce = KeepForce;
 
+        LevelManager.Unregister(this);
         Destroy(gameObject);
     }
 
@@ -314,6 +316,9 @@ public class Player : MonoBehaviour
 
         Appearance SelectWorst(Appearance newAppearance)
         {
+            if (newAppearance is Appearance.Pacman)
+                return newAppearance;
+
             if (appearance is Appearance.Pacman or Appearance.Sick)
                 return appearance;
 

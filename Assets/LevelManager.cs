@@ -1,17 +1,20 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
     static int currentIndex = -1;
     static List<LevelData> Levels;
 
-    public static LevelManager Instance;
+    static LevelManager Instance;
 
-    [HideInInspector] public LevelData Current => Levels[currentIndex];
+    LevelData level => Levels[currentIndex];
+    List<Player> players = new();
 
     //prefabs
     public GameObject IndestructibleBlockPrefab;
@@ -49,20 +52,50 @@ public class LevelManager : MonoBehaviour
             for (int y = 1; y <= GridDimensions.y; y++)
             {
                 var gridPos = new Vector2Int(x, y);
-                var gridElement = Current.GetItemAt(gridPos);
+                var gridElement = level.GetItemAt(gridPos);
                 PlaceElement(gridElement, gridPos);
             }
         }
     }
 
-    public void PlaceNewElement(Vector2Int gridPos)
+    void Start()
+    {
+        if (players.Count <= 1)
+        {
+            StartCoroutine(ExecuteAfterWait(5f));
+
+        }
+    }
+
+    public static void Register(Player player)
+    {
+        Instance.players.Add(player);
+    }
+
+    public static void Unregister(Player player)
+    {
+        Instance.UnregisterInstance(player);
+    }
+
+    private void UnregisterInstance(Player player)
+    {
+        players.Remove(player);
+        Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, player.AtomicBombs, player.KeepForce), false);
+
+        if (players.Count <= 1)
+        {
+            StartCoroutine(ExecuteAfterWait(5f));
+        }
+    }
+
+    public static void PlaceNewElement(Vector2Int gridPos)
     {
         var objects = GridSystem.Current.GetObjects(gridPos);
         if (objects.Have<Player>() || objects.Have<DeadPlayer>())
             return;
 
-        var gridElement = Current.GetNewItemAt(gridPos);
-        PlaceElement(gridElement, gridPos);
+        var gridElement = Instance.level.GetNewItemAt(gridPos);
+        Instance.PlaceElement(gridElement, gridPos);
     }
 
     private void PlaceElement(LevelData.GridElement gridElement, Vector2Int gridPos)
@@ -98,7 +131,7 @@ public class LevelManager : MonoBehaviour
             GridSystem.Current.Add(newObject, gridPos);
 
             if (newObject.TryGetComponent<Block>(out var block))
-                block.style = Current.BlockStyle;
+                block.style = level.BlockStyle;
         }
     }
 
@@ -120,5 +153,16 @@ public class LevelManager : MonoBehaviour
             }
         }
         return levelData;
+    }
+
+
+    private IEnumerator ExecuteAfterWait(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        foreach (var player in players)
+            Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, player.AtomicBombs, player.KeepForce), true);
+
+        SceneManager.LoadScene("Highscore");
     }
 }

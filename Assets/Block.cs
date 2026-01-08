@@ -48,7 +48,7 @@ public class Block : MonoBehaviour
         else
         {
             var gridPos = GridSystem.Current.Remove(gameObject);
-            LevelManager.Instance.PlaceNewElement(gridPos);
+            LevelManager.PlaceNewElement(gridPos);
             Destroy(gameObject);
         }
     }
