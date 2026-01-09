@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Highscore : MonoBehaviour
 {
@@ -16,12 +17,13 @@ public class Highscore : MonoBehaviour
     {
         var grid = new GridSystem(GridDimensions);
 
+        int y = 19;
         for (int i = 0; i < 4; i++)
         {
             if (!PlayerStats.TryGetValue(i + 1, out var stats))
                 continue;
 
-            int y = 15 - 4 * i;
+            y -= 4;
 
             //numbers as string to index into
             var winstr = Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0');
@@ -53,12 +55,26 @@ public class Highscore : MonoBehaviour
                 PlaceUI(19, y, fontSprites[strenstr[1]]);
             }
 
-            if (true) //store if this happened this round#
+            if (stats.WonLastRound) //store if this happened this round#
             {
-                PlaceUI(10, y - 1, fontSprites['+']);
-                PlaceUI(11, y - 1, otherSprites[2]);
+                if (stats.Wins % 10 is 0)
+                {
+                    PlaceUI(10, y - 1, fontSprites['+']);
+                    PlaceUI(11, y - 1, otherSprites[3]);
+                }
+                else if (stats.Wins % 5 is 0)
+                {
+                    PlaceUI(10, y - 1, fontSprites['+']);
+                    PlaceUI(11, y - 1, otherSprites[2]);
+                }
             }
         }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            SceneManager.LoadScene("World");
     }
 
     private void PlaceUI(int x, int y, Sprite sprite)
@@ -71,12 +87,23 @@ public class Highscore : MonoBehaviour
     public static void AddPlayerDetails(PlayerDetails details, bool winner)
     {
         PlayerStats.TryGetValue(details.Number, out var stats);
-        stats ??= new Stats(0, 1, 1, null);
+        stats ??= new Stats(0, false, 1, 1, null);
         PlayerStats[details.Number] = stats.Merge(details, winner);
     }
 
+    public static (int Strength, int Bombs, int AtomicBombs) GetPlayerConfig(int number)
+    {
+        PlayerStats.TryGetValue(number, out var stats);
+        stats ??= new Stats(0, false, 1, 1, null);
+
+        if (stats.Override?.KeepForce is true)
+            return (Math.Max(stats.Strength, stats.Override.Strength), Math.Max(stats.Bombs, stats.Override.Bombs), Math.Max(0, stats.Override.AtomicBombs));
+        
+        return (stats.Strength, stats.Bombs, 0);
+    }
+
     public record PlayerDetails(int Number, int Strength, int Bombs, int AtomicBombs, bool KeepForce);
-    private record Stats(int Wins, int Strength, int Bombs, PlayerDetails Override)
+    private record Stats(int Wins, bool WonLastRound, int Strength, int Bombs, PlayerDetails Override)
     {
         public Stats Merge(PlayerDetails newDetails, bool winner)
         {
@@ -85,8 +112,7 @@ public class Highscore : MonoBehaviour
             var bombs = 1 + wins / 10 + (wins % 10 >= 5 ? 1 : 0); //start with 1, plus one every 5 wins
 
             var kf = newDetails.KeepForce;
-
-            return new Stats(wins, strength, bombs, new PlayerDetails(newDetails.Number, kf ? newDetails.Strength : strength, kf ? newDetails.Bombs : bombs, kf ? newDetails.AtomicBombs : 0, kf));
+            return new Stats(wins, winner, strength, bombs, new PlayerDetails(newDetails.Number, kf ? newDetails.Strength : strength, kf ? newDetails.Bombs : bombs, kf ? newDetails.AtomicBombs : 0, kf));
         }
     }
 }

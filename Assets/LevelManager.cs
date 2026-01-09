@@ -80,7 +80,7 @@ public class LevelManager : MonoBehaviour
     private void UnregisterInstance(Player player)
     {
         players.Remove(player);
-        Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, player.AtomicBombs, player.KeepForce), false);
+        Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, 0, false), false);
 
         if (players.Count <= 1)
         {

@@ -33,8 +33,8 @@ public class Player : MonoBehaviour
 
     public int Strength { get; private set; } = 1;
     public int Bombs { get; private set; } = 1;
-    public int AtomicBombs { get; private set; }
-    public bool KeepForce { get; private set; }
+    public int AtomicBombs { get; private set; } = 0;
+    public bool KeepForce { get; private set; } = false;
 
     Rigidbody2D rb;
     SpriteRenderer sr;
@@ -65,6 +65,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        (Strength, Bombs, AtomicBombs) = Highscore.GetPlayerConfig(playerNumber);
+
         lastGridPos = Grid.GetPosition(gameObject);
         targetWorldPos = Grid.ToWorld(lastGridPos);
         availableBombs = Bombs;
@@ -102,7 +104,7 @@ public class Player : MonoBehaviour
                 var bomb = bombObject.GetComponent<ExplodingBomb>();
                 bomb.player = this;
                 bomb.strength = Strength;
-                bomb.delay = 1f;
+                bomb.delay = 1.5f;
 
                 if (appearance is Appearance.Pacman)
                     appearance = AtomicBombs > 0 ? Appearance.Atomic : Appearance.Normal;
@@ -251,10 +253,17 @@ public class Player : MonoBehaviour
 
     internal void Eat(DeadPlayer deadPlayer)
     {
+        Debug.Log($"deadbombs: {deadPlayer.Bombs}, minebombs: {Bombs}");
+
+
         Strength = Math.Max(Strength, deadPlayer.Strength);
-        Bombs = Math.Max(Bombs, deadPlayer.Bombs);
         AtomicBombs = Math.Max(AtomicBombs, deadPlayer.AtomicBombs);
         KeepForce = KeepForce || deadPlayer.KeepForce;
+
+        //increase available bombs as well
+        var tmpBombs = Math.Max(Bombs, deadPlayer.Bombs);
+        availableBombs += tmpBombs - Bombs;
+        Bombs = tmpBombs;
     }
 
     internal void Consume(Consumable.Kind type)

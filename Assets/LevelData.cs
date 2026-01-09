@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -53,30 +54,29 @@ public record LevelData(string ItemProbabilities, string BlockProbabilities, int
 
     private List<GridElement> GetAvailableItems()
     {
-        var items = new GridElement[] { GridElement.Empty, GridElement.Empty, GridElement.Mine, GridElement.Light, GridElement.KeepForce, GridElement.Powder, GridElement.Bomb, GridElement.AtomicBomb, GridElement.Pacman, GridElement.Surprise };
-        var chances = new List<GridElement>();
-
-        //treat each entry as a probability
-        for (int i = 0; i < Math.Min(ItemProbabilities.ToString().Length, items.Length); i++)
-        {
-            if (int.TryParse(ItemProbabilities.ToString()[i].ToString(), out int multiplier))
-                chances.AddRange(Enumerable.Repeat(items[i], multiplier));
-        }
-
-        return chances;
+        var items = new GridElement[] { GridElement.Empty, GridElement.Mine, GridElement.Light, GridElement.KeepForce, GridElement.Powder,
+                                        GridElement.Bomb, GridElement.AtomicBomb, GridElement.Pacman, GridElement.Surprise };
+        return ParseProbabilities(ItemProbabilities, items);
     }
 
     private List<GridElement> GetAvailableBlocks()
     {
         var blocks = new GridElement[] { GridElement.IndestructibleBlock, GridElement.DamagedBlock, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.Empty };
+        return ParseProbabilities(BlockProbabilities, blocks);
+    }
+
+    private static List<GridElement> ParseProbabilities(string encodedProbabilities, GridElement[] availableElements)
+    {
         var chances = new List<GridElement>();
 
-        //treat each entry as a probability
-        for (int i = 0; i < Math.Min(BlockProbabilities.Length, blocks.Length); i++)
+        //treat each entry as a hex probability
+        for (int i = 0; i < Math.Min(encodedProbabilities.Length, availableElements.Length); i++)
         {
-            if (int.TryParse(BlockProbabilities[i].ToString(), out int multiplier))
-                chances.AddRange(Enumerable.Repeat(blocks[i], multiplier));
+            if (int.TryParse(encodedProbabilities[i].ToString(), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int multiplier))
+                chances.AddRange(Enumerable.Repeat(availableElements[i], multiplier));
         }
+
+        Debug.Log(string.Join(", ", chances));
 
         return chances;
     }

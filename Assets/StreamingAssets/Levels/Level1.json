@@ -1,12 +1,11 @@
 {
-  "ItemProbabilities": "9333133233",
+  "ItemProbabilities": "E34134245",
   "BlockProbabilities": "21532",
   "BlockStyle": 3,
   "Fill": true,
   "Layout": {
     "2,2": "Player1",
     "2,16": "plaYer2",
-    "20,16": "Player3",
     "20,2": "Player4",
     "8,8": "IndestructibleBlock",
     "9,8": "IndestructibleBlock",
