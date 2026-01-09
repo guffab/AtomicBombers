@@ -75,9 +75,6 @@ public record LevelData(string ItemProbabilities, string BlockProbabilities, int
             if (int.TryParse(encodedProbabilities[i].ToString(), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int multiplier))
                 chances.AddRange(Enumerable.Repeat(availableElements[i], multiplier));
         }
-
-        Debug.Log(string.Join(", ", chances));
-
         return chances;
     }
 

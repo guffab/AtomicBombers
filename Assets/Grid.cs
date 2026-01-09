@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GridSystem
+public class Grid
 {
     private Dictionary<Vector2Int, List<GameObject>> GridToObject = new();
     private Dictionary<GameObject, Vector2Int> ObjectToGrid = new();
 
-    [HideInInspector] public static GridSystem Current;
+    [HideInInspector] public static Grid Current;
     [HideInInspector] public Vector2Int Dimensions { get; }
 
-    public GridSystem(Vector2Int gridDimensions)
+    public Grid(Vector2Int gridDimensions)
     {
         Current = this;
         Dimensions = gridDimensions;
@@ -80,9 +80,10 @@ public class GridSystem
         return pos;
     }
 
-    public Vector3 ToWorld(Vector2Int v)
+    public Vector3 ToWorld(Vector2Int v, bool raw = false)
     {
-        v = Wrap(v);
+        if (!raw)
+            v = Wrap(v);
 
         float scale = Camera.main.pixelHeight / 480f;
         float offset = Camera.main.pixelWidth / 640f * 2;

@@ -15,7 +15,7 @@ public class Highscore : MonoBehaviour
 
     void Awake()
     {
-        var grid = new GridSystem(GridDimensions);
+        var grid = new Grid(GridDimensions);
 
         int y = 19;
         for (int i = 0; i < 4; i++)
@@ -79,7 +79,7 @@ public class Highscore : MonoBehaviour
 
     private void PlaceUI(int x, int y, Sprite sprite)
     {
-        var worldPos = GridSystem.Current.ToWorld(new Vector2Int(x, y));
+        var worldPos = Grid.Current.ToWorld(new Vector2Int(x, y));
         var dummy = Instantiate(fontPrefab, worldPos, Quaternion.identity);
         dummy.GetComponent<SpriteRenderer>().sprite = sprite;
     }

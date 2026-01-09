@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
     public GameObject ExplodingBombPrefab;
     public GameObject ExplodingAtomicBombPrefab;
 
-    private GridSystem Grid => GridSystem.Current;
+    private Grid Grid => Grid.Current;
 
     void Awake()
     {
@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
 
         if (!isMoving && bufferedDirection != Vector2Int.zero)
         {
-            var grid = GridSystem.Current;
+            var grid = Grid.Current;
 
             if (grid.TryMove(this, bufferedDirection))
             {
@@ -148,15 +148,35 @@ public class Player : MonoBehaviour
         if (!isMoving)
             return;
 
-        //when jumping to the other side of the screen, an animation looks horrible and confusing
-        if ((transform.position - targetWorldPos).magnitude > 1f)
-            transform.position = targetWorldPos;
-        else
+        if ((transform.position - targetWorldPos).magnitude <= 1f)
             transform.position = Vector3.MoveTowards(
                 transform.position,
                 targetWorldPos,
                 speed * Time.deltaTime
             );
+        else
+        {
+            var nextGridpos = Grid.GetPosition(gameObject);
+            var direction = (lastGridPos - nextGridpos).Normalize();
+
+            //position + half of neighboring position
+            var leftFakePos = Grid.ToWorld(lastGridPos) + ((Grid.ToWorld(lastGridPos + direction, true) - Grid.ToWorld(lastGridPos)) / 2);
+            var rightFakePos = Grid.ToWorld(nextGridpos) + ((Grid.ToWorld(nextGridpos - direction, true) - Grid.ToWorld(nextGridpos)) / 2);
+
+            //walk half off one side, then walk half in from other side
+            if ((transform.position - leftFakePos).magnitude < (transform.position - rightFakePos).magnitude)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    leftFakePos,
+                    speed * Time.deltaTime
+                );
+
+                //jump to other side
+                if (transform.position == leftFakePos)
+                    transform.position = rightFakePos;
+            }
+        }
 
         if (transform.position == targetWorldPos)
         {
@@ -253,9 +273,6 @@ public class Player : MonoBehaviour
 
     internal void Eat(DeadPlayer deadPlayer)
     {
-        Debug.Log($"deadbombs: {deadPlayer.Bombs}, minebombs: {Bombs}");
-
-
         Strength = Math.Max(Strength, deadPlayer.Strength);
         AtomicBombs = Math.Max(AtomicBombs, deadPlayer.AtomicBombs);
         KeepForce = KeepForce || deadPlayer.KeepForce;

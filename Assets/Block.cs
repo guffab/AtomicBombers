@@ -41,13 +41,13 @@ public class Block : MonoBehaviour
 
         else if (state is State.HeavyDamaged)
         {
-            GridSystem.Current.Remove(gameObject);
+            Grid.Current.Remove(gameObject);
             Destroy(gameObject);
         }
 
         else
         {
-            var gridPos = GridSystem.Current.Remove(gameObject);
+            var gridPos = Grid.Current.Remove(gameObject);
             LevelManager.PlaceNewElement(gridPos);
             Destroy(gameObject);
         }

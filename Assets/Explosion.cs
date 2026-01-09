@@ -7,7 +7,7 @@ public class Explosion : MonoBehaviour
     public int Strength;
     public bool Unstoppable;
 
-    GridSystem Grid => GridSystem.Current;
+    Grid Grid => Grid.Current;
 
     bool hasKilledPlayer = false;
 

@@ -41,7 +41,7 @@ public abstract class ExplosiveBase : MonoBehaviour
 
     public virtual void Explode(int strength, bool unstoppable)
     {
-        var grid = GridSystem.Current;
+        var grid = Grid.Current;
         var currentPos = grid.Remove(gameObject);
 
         //spawn explosions unless already present
@@ -66,7 +66,7 @@ public abstract class ExplosiveBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private bool TryInstantiateExplosion(GridSystem grid, Vector2Int position, int strength, bool unstoppable)
+    private bool TryInstantiateExplosion(Grid grid, Vector2Int position, int strength, bool unstoppable)
     {
         var objects = grid.GetObjects(position);
         bool isExploding = objects.Any(x => x.TryGetComponent<Explosion>(out _));

@@ -3,6 +3,12 @@ using UnityEngine;
 
 public static class Extensions
 {
+    public static Vector2Int Normalize(this Vector2Int vector)
+    {
+        var tmp = ((Vector2)vector).normalized;
+        return new Vector2Int((int) tmp.x, (int) tmp.y);
+    }
+
     public static bool Have<T>(this List<GameObject> objects) where T : MonoBehaviour
     {
         return objects.Have<T>(out _);

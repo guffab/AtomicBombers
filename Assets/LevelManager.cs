@@ -43,7 +43,7 @@ public class LevelManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        var grid = new GridSystem(GridDimensions);
+        var grid = new Grid(GridDimensions);
         Levels ??= LoadLevels();
         currentIndex = (currentIndex + 1) % Levels.Count;
 
@@ -90,7 +90,7 @@ public class LevelManager : MonoBehaviour
 
     public static void PlaceNewElement(Vector2Int gridPos)
     {
-        var objects = GridSystem.Current.GetObjects(gridPos);
+        var objects = Grid.Current.GetObjects(gridPos);
         if (objects.Have<Player>() || objects.Have<DeadPlayer>())
             return;
 
@@ -126,9 +126,9 @@ public class LevelManager : MonoBehaviour
 
         if (itemToInstantiate != null)
         {
-            var position = GridSystem.Current.ToWorld(gridPos);
+            var position = Grid.Current.ToWorld(gridPos);
             var newObject = Instantiate(itemToInstantiate, position, Quaternion.identity);
-            GridSystem.Current.Add(newObject, gridPos);
+            Grid.Current.Add(newObject, gridPos);
 
             if (newObject.TryGetComponent<Block>(out var block))
                 block.style = level.BlockStyle;

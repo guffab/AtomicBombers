@@ -19,7 +19,7 @@ public class DeadPlayer : MonoBehaviour
     
     public void Remove()
     {
-        GridSystem.Current.Remove(gameObject);
+        Grid.Current.Remove(gameObject);
         Destroy(gameObject);
     }
 
