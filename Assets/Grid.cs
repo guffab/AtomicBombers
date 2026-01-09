@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,11 +10,29 @@ public class Grid
 
     [HideInInspector] public static Grid Current;
     [HideInInspector] public Vector2Int Dimensions { get; }
+    [HideInInspector] public Vector2Int CellSize { get; }
 
-    public Grid(Vector2Int gridDimensions)
+    public Grid(Vector2Int cellSize)
     {
         Current = this;
-        Dimensions = gridDimensions;
+        CellSize = cellSize;
+
+        Dimensions = new Vector2Int(MaximizeGrid(cellSize.x, 640), MaximizeGrid(cellSize.y, 480));
+        Debug.Log(Dimensions);
+
+        static int MaximizeGrid(int cellSizeDim, int maxScreenSize)
+        {
+            int dim = 0;
+            
+            while (dim + cellSizeDim < maxScreenSize)
+                dim += cellSizeDim;
+
+            //for some reason we want an odd number of grid points
+            if ((dim / cellSizeDim) % 2 == 0)
+                dim -= cellSizeDim;
+            
+            return dim / cellSizeDim;
+        }
     }
 
     public void Add(GameObject g, Vector2Int v)
@@ -65,7 +84,7 @@ public class Grid
                 return true;
 
             return collisions.All(x => !x.TryGetComponent<ExplodingBomb>(out _)) &&
-                   collisions.All(x => !x.TryGetComponent<Block>(out var block) || 
+                   collisions.All(x => !x.TryGetComponent<Block>(out var block) ||
                    block.state is Block.State.Walkable || (player.appearance is Player.Appearance.Ghost && block.state is Block.State.Solid));
         }
     }
@@ -88,7 +107,7 @@ public class Grid
         float scale = Camera.main.pixelHeight / 480f;
         float offset = Camera.main.pixelWidth / 640f * 2;
 
-        var screenPos = new Vector3((v.x + offset - 1) * 28 * scale, v.y * 28 * scale, 10);
+        var screenPos = new Vector3((v.x + offset - 1) * CellSize.x * scale, v.y * CellSize.y * scale, 10);
         var worldPos = Camera.main.ScreenToWorldPoint(screenPos);
         worldPos.y -= .12f; //not sure why all coordinates are wrong by this factor
         return worldPos;
@@ -96,7 +115,7 @@ public class Grid
 
     private Vector2Int Wrap(Vector2Int raw)
     {
-        return new Vector2Int((((raw.x - 1) % Dimensions.x) + Dimensions.x) % Dimensions.x + 1, 
+        return new Vector2Int((((raw.x - 1) % Dimensions.x) + Dimensions.x) % Dimensions.x + 1,
                               (((raw.y - 1) % Dimensions.y) + Dimensions.y) % Dimensions.y + 1);
     }
 }

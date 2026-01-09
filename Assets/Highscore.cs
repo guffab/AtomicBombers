@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class Highscore : MonoBehaviour
 {
     private static Dictionary<int, Stats> PlayerStats = new();
-    private readonly Vector2Int GridDimensions = new Vector2Int(21, 17);
 
     public Sprite[] fontSprites;
     public Sprite[] playerSprites;
@@ -15,7 +14,7 @@ public class Highscore : MonoBehaviour
 
     void Awake()
     {
-        var grid = new Grid(GridDimensions);
+        var grid = new Grid(new Vector2Int(28, 28));
 
         int y = 19;
         for (int i = 0; i < 4; i++)

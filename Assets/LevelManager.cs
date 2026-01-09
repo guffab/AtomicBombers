@@ -37,19 +37,16 @@ public class LevelManager : MonoBehaviour
     public GameObject GhostPrefab;
     public GameObject SurprisePrefab;
 
-    [Tooltip("Grid extends from (1,1) to (x, y) entered in this property. Positive by convention.")]
-    public Vector2Int GridDimensions;
-
     void Awake()
     {
         Instance = this;
-        var grid = new Grid(GridDimensions);
+        var grid = new Grid(new Vector2Int(28, 28));
         Levels ??= LoadLevels();
         currentIndex = (currentIndex + 1) % Levels.Count;
 
-        for (int x = 1; x <= GridDimensions.x; x++)
+        for (int x = 1; x <= grid.Dimensions.x; x++)
         {
-            for (int y = 1; y <= GridDimensions.y; y++)
+            for (int y = 1; y <= grid.Dimensions.y; y++)
             {
                 var gridPos = new Vector2Int(x, y);
                 var gridElement = level.GetItemAt(gridPos);
