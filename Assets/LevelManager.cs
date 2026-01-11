@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    static int currentIndex = 19;
+    static int currentIndex = 9;
     static List<LevelData> Levels;
 
     static LevelManager Instance;

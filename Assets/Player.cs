@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
 
     internal int availableBombs;
 
-    public int Strength { get; private set; } = 1;
+    public int Strength { get; private set; } = 2;
     public int Bombs { get; private set; } = 1;
     public int AtomicBombs { get; private set; } = 0;
     public bool KeepForce { get; private set; } = false;
@@ -295,11 +295,11 @@ public class Player : MonoBehaviour
             KeepForce = true;
 
         else if (type is Consumable.Kind.Powder)
-            Strength = Math.Min(Strength + 1, 10);
+            Strength = Math.Min(Strength + 1, 20);
 
         else if (type is Consumable.Kind.Bomb)
         {
-            Bombs = Math.Min(Bombs + 1, 30);
+            Bombs = Math.Min(Bombs + 1, 15);
             availableBombs = Math.Min(availableBombs + 1, 30);
         }
 
@@ -312,7 +312,7 @@ public class Player : MonoBehaviour
 
         else if (type is Consumable.Kind.Megabomb)
         {
-            Strength = 10;
+            Strength = 20;
             AtomicBombs = 999_999;
         }
 

@@ -1,34 +1,35 @@
 {
   "WorldName": "MEGADEATH",
   "Name": "ATOMIZATION",
-  "ItemProbabilities": "E34134245",
+  "ItemProbabilities": "A34134246",
   "BlockProbabilities": "0000861",
   "BlockStyle": 4,
   "Fill": true,
+  "TimeOfDay": 3,
   "Layout": {
-    "6,6": "Player1",
-    "7,6": "Megabomb",
-    "11,6": "SolidBlock",
-    "15,6": "Megabomb",
-    "16,6": "Player4",
-    "6,7": "Megabomb",
-    "16,7": "Megabomb",
-    "6,9": "SolidBlock",
-    "11,9": "SolidBlock",
-    "16,9": "SolidBlock",
-    "6,11": "Megabomb",
-    "16,11": "Megabomb",
-    "6,12": "Player2",
+    "6,12": "Player1",
     "7,12": "Megabomb",
     "11,12": "SolidBlock",
     "15,12": "Megabomb",
-    "16,12": "Player3"
+    "16,12": "Player4",
+    "6,11": "Megabomb",
+    "16,11": "Megabomb",
+    "6,9": "SolidBlock",
+    "11,9": "SolidBlock",
+    "16,9": "SolidBlock",
+    "6,7": "Megabomb",
+    "16,7": "Megabomb",
+    "6,6": "Player2",
+    "7,6": "Megabomb",
+    "11,6": "SolidBlock",
+    "15,6": "Megabomb",
+    "16,6": "Player3"
   },
   "HiddenItems": {
-    "11,6": "Mine",
+    "11,12": "Mine",
     "6,9": "Mine",
     "11,9": "Mine",
     "16,9": "Mine",
-    "11,12": "Mine"
+    "11,6": "Mine"
   }
 }
