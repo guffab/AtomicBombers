@@ -12,25 +12,37 @@ public class Grid
     [HideInInspector] public Vector2Int Dimensions { get; }
     [HideInInspector] public Vector2Int CellSize { get; }
 
+    static Vector3 centerOffset;
+    static float scale;
+
     public Grid(Vector2Int cellSize)
     {
         Current = this;
         CellSize = cellSize;
-
         Dimensions = new Vector2Int(MaximizeGrid(cellSize.x, 640), MaximizeGrid(cellSize.y, 480));
-        Debug.Log(Dimensions);
+
+        if (scale is 0) //not initialized
+        {
+            scale = Camera.main.pixelHeight / 480f;
+
+            var gridMax = Camera.main.ScreenToWorldPoint(ToScreen(Dimensions));
+            var screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight, 10));
+
+            centerOffset = (new Vector3(screenMax.x, 0, 0) - new Vector3(gridMax.x, 0, 0)) / 2;
+            centerOffset -= new Vector3(.14f, .10f, 0); //not sure why all coordinates are wrong by this factor
+        }
 
         static int MaximizeGrid(int cellSizeDim, int maxScreenSize)
         {
             int dim = 0;
-            
+
             while (dim + cellSizeDim < maxScreenSize)
                 dim += cellSizeDim;
 
             //for some reason we want an odd number of grid points
             if ((dim / cellSizeDim) % 2 == 0)
                 dim -= cellSizeDim;
-            
+
             return dim / cellSizeDim;
         }
     }
@@ -104,13 +116,12 @@ public class Grid
         if (!raw)
             v = Wrap(v);
 
-        float scale = Camera.main.pixelHeight / 480f;
-        float offset = Camera.main.pixelWidth / 640f * 2;
+        return Camera.main.ScreenToWorldPoint(ToScreen(v)) + centerOffset;
+    }
 
-        var screenPos = new Vector3((v.x + offset - 1) * CellSize.x * scale, v.y * CellSize.y * scale, 10);
-        var worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        worldPos.y -= .12f; //not sure why all coordinates are wrong by this factor
-        return worldPos;
+    private Vector3 ToScreen(Vector2Int local)
+    {
+        return new Vector3(local.x * CellSize.x * scale, local.y * CellSize.y * scale, 10);
     }
 
     private Vector2Int Wrap(Vector2Int raw)
