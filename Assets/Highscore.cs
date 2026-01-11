@@ -93,7 +93,7 @@ public class Highscore : MonoBehaviour
     public static (int Strength, int Bombs, int AtomicBombs) GetPlayerConfig(int number)
     {
         PlayerStats.TryGetValue(number, out var stats);
-        stats ??= new Stats(0, false, 1, 1, null);
+        stats ??= new Stats(0, false, 2, 1, null);
 
         if (stats.Override?.KeepForce is true)
             return (Math.Max(stats.Strength, stats.Override.Strength), Math.Max(stats.Bombs, stats.Override.Bombs), Math.Max(0, stats.Override.AtomicBombs));
@@ -107,8 +107,8 @@ public class Highscore : MonoBehaviour
         public Stats Merge(PlayerDetails newDetails, bool winner)
         {
             var wins = winner ? Wins + 1 : Wins;
-            var strength = 1 + wins / 10; //start with 1, plus one every 10 wins
-            var bombs = 1 + wins / 10 + (wins % 10 >= 5 ? 1 : 0); //start with 1, plus one every 5 wins
+            var strength = 2 + wins / 10; //start with 2, plus one every 10 wins
+            var bombs = 1 + wins / 10 + (wins % 10 >= 5 ? 1 : 0); //start with 1, plus one every 5 wins (but not 10th)
 
             var kf = newDetails.KeepForce;
             return new Stats(wins, winner, strength, bombs, new PlayerDetails(newDetails.Number, kf ? newDetails.Strength : strength, kf ? newDetails.Bombs : bombs, kf ? newDetails.AtomicBombs : 0, kf));
