@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IndestructibleBlockPrefab: {fileID: 1565671050838584804, guid: 514fa84e4efa2fbf6ae3416f1a26c4bc, type: 3}
-  DamagedBlockPrefab: {fileID: 6676342944700740580, guid: ba2c7c65d3655aee7b9ef78ef97d6d66, type: 3}
+  SlightlyDamagedBlockPrefab: {fileID: 6676342944700740580, guid: ba2c7c65d3655aee7b9ef78ef97d6d66, type: 3}
+  MediumDamagedBlockPrefab: {fileID: 4012672836901537963, guid: c34d120fdfd4f9529969b5c0f04da923, type: 3}
+  HeavilyDamagedBlockPrefab: {fileID: 3334747484959650508, guid: c5e6a2fed4a6463c7a035ed523aab77b, type: 3}
   SolidBlockPrefab: {fileID: 1596453453834885811, guid: eaf321d4b6d3f7ce285dfdce85a9f18a, type: 3}
   WalkableBlockPrefab: {fileID: 5957209679896608735, guid: 84fbe47abf022e14aad9041f4218e264, type: 3}
   MinePrefab: {fileID: 5066260766953476783, guid: 9e7d7b18085a265d6961051c492af97c, type: 3}
@@ -63,4 +65,3 @@ MonoBehaviour:
   ImmortalPrefab: {fileID: 1837631978378484995, guid: 2648e5bee4f6d15fe9e0dd1aa2088706, type: 3}
   GhostPrefab: {fileID: 4128940192003580034, guid: 07f64a63960c16f00ab968c35f81b1f6, type: 3}
   SurprisePrefab: {fileID: 1748878773842960639, guid: 25f7a6897419c833d86ff24ae901bdbe, type: 3}
-  GridDimensions: {x: 21, y: 17}

@@ -14,7 +14,7 @@ using UnityEngine;
 /// <param name="Fill">Wether or not the level grid should be randomly filled with blocks for grid points not defined in the <see cref="Layout"/>.</param>
 /// <param name="Layout">A coordinate+item pair. Example: { "1,1": "Player1", "17,3": "Explosive" }</param>
 /// <param name="HiddenItems">A coordinate+item pair for items that are only revealed after exploding a block.</param>
-public record LevelData(string ItemProbabilities, string BlockProbabilities, int BlockStyle, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
+public record LevelData(string WorldName, string Name, string ItemProbabilities, string BlockProbabilities, int BlockStyle, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
 {
     static readonly System.Random random = new();
     List<GridElement> AvailableItems;
@@ -61,7 +61,7 @@ public record LevelData(string ItemProbabilities, string BlockProbabilities, int
 
     private List<GridElement> GetAvailableBlocks()
     {
-        var blocks = new GridElement[] { GridElement.IndestructibleBlock, GridElement.DamagedBlock, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.Empty };
+        var blocks = new GridElement[] { GridElement.IndestructibleBlock, GridElement.SlightlyDamagedBlock, GridElement.MediumDamagedBlock, GridElement.HeavilyDamagedBlock, GridElement.SolidBlock, GridElement.WalkableBlock, GridElement.Empty };
         return ParseProbabilities(BlockProbabilities, blocks);
     }
 
@@ -82,10 +82,14 @@ public record LevelData(string ItemProbabilities, string BlockProbabilities, int
     public enum GridElement
     {
         //blocks
-        IndestructibleBlock = -9,
-        DamagedBlock = -8,
-        SolidBlock = -7,
-        WalkableBlock = -6,
+        IndestructibleBlock = -11,
+        SlightlyDamagedBlock,
+        MediumDamagedBlock,
+        HeavilyDamagedBlock,
+        SolidBlock,
+        WalkableBlock,
+
+        //explosive
         Mine = -5,
 
         //players

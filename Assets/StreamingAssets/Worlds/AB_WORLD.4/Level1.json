@@ -1,0 +1,24 @@
+{
+  "WorldName": "MEGADEATH",
+  "Name": "ADONF",
+  "ItemProbabilities": "E34134245",
+  "BlockProbabilities": "0000861",
+  "BlockStyle": 2,
+  "Fill": true,
+  "Layout": {
+    "2,2": "Player1",
+    "3,2": "Empty",
+    "19,2": "Empty",
+    "20,2": "Player3",
+    "2,3": "Empty",
+    "20,3": "Empty",
+    "11,9": "Megabomb",
+    "2,15": "Empty",
+    "20,15": "Empty",
+    "2,16": "Player4",
+    "3,16": "Empty",
+    "19,16": "Empty",
+    "20,16": "Player2"
+  },
+  "HiddenItems": {}
+}

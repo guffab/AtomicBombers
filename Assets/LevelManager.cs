@@ -8,17 +8,19 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    static int currentIndex = -1;
+    static int currentIndex = 19;
     static List<LevelData> Levels;
 
     static LevelManager Instance;
 
-    LevelData level => Levels[currentIndex];
+    LevelData Level => Levels[currentIndex];
     List<Player> players = new();
 
     //prefabs
     public GameObject IndestructibleBlockPrefab;
-    public GameObject DamagedBlockPrefab;
+    public GameObject SlightlyDamagedBlockPrefab;
+    public GameObject MediumDamagedBlockPrefab;
+    public GameObject HeavilyDamagedBlockPrefab;
     public GameObject SolidBlockPrefab;
     public GameObject WalkableBlockPrefab;
     public GameObject MinePrefab;
@@ -44,12 +46,14 @@ public class LevelManager : MonoBehaviour
         Levels ??= LoadLevels();
         currentIndex = (currentIndex + 1) % Levels.Count;
 
+        Debug.Log(Level.WorldName + Level.Name);
+
         for (int x = 1; x <= grid.Dimensions.x; x++)
         {
             for (int y = 1; y <= grid.Dimensions.y; y++)
             {
                 var gridPos = new Vector2Int(x, y);
-                var gridElement = level.GetItemAt(gridPos);
+                var gridElement = Level.GetItemAt(gridPos);
                 PlaceElement(gridElement, gridPos);
             }
         }
@@ -91,7 +95,7 @@ public class LevelManager : MonoBehaviour
         if (objects.Have<Player>() || objects.Have<DeadPlayer>())
             return;
 
-        var gridElement = Instance.level.GetNewItemAt(gridPos);
+        var gridElement = Instance.Level.GetNewItemAt(gridPos);
         Instance.PlaceElement(gridElement, gridPos);
     }
 
@@ -100,7 +104,9 @@ public class LevelManager : MonoBehaviour
         var itemToInstantiate = gridElement switch
         {
             LevelData.GridElement.IndestructibleBlock => IndestructibleBlockPrefab,
-            LevelData.GridElement.DamagedBlock => DamagedBlockPrefab,
+            LevelData.GridElement.SlightlyDamagedBlock => SlightlyDamagedBlockPrefab,
+            LevelData.GridElement.MediumDamagedBlock => MediumDamagedBlockPrefab,
+            LevelData.GridElement.HeavilyDamagedBlock => HeavilyDamagedBlockPrefab,
             LevelData.GridElement.SolidBlock => SolidBlockPrefab,
             LevelData.GridElement.WalkableBlock => WalkableBlockPrefab,
             LevelData.GridElement.Mine => MinePrefab,
@@ -128,16 +134,16 @@ public class LevelManager : MonoBehaviour
             Grid.Current.Add(newObject, gridPos);
 
             if (newObject.TryGetComponent<Block>(out var block))
-                block.style = level.BlockStyle;
+                block.style = Level.BlockStyle;
         }
     }
 
     private static List<LevelData> LoadLevels()
     {
         var levelData = new List<LevelData>();
-        string levelsPath = Path.Combine(Application.streamingAssetsPath, "Levels");
+        string levelsPath = Path.Combine(Application.streamingAssetsPath, "Worlds");
 
-        foreach (string file in Directory.GetFiles(levelsPath, "*.json"))
+        foreach (string file in Directory.GetFiles(levelsPath, "*.json", SearchOption.AllDirectories))
         {
             try
             {
