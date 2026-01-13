@@ -129,6 +129,9 @@ public class LevelManager : MonoBehaviour
 
         if (itemToInstantiate != null)
         {
+            if (itemToInstantiate == Player4Prefab && Setup.Players < 4 || itemToInstantiate == Player3Prefab && Setup.Players < 3)
+                return;
+
             var position = Grid.Current.ToWorld(gridPos);
             var newObject = Instantiate(itemToInstantiate, position, Quaternion.identity);
             Grid.Current.Add(newObject, gridPos);
