@@ -23,13 +23,11 @@ public class Grid
 
         if (scale is 0) //not initialized
         {
-            scale = Camera.main.pixelHeight / 480f;
+            scale = Camera.main.pixelHeight / 480;
 
             var gridMax = Camera.main.ScreenToWorldPoint(ToScreen(Dimensions));
             var screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight, 10));
-
-            centerOffset = (new Vector3(screenMax.x, 0, 0) - new Vector3(gridMax.x, 0, 0)) / 2;
-            centerOffset -= new Vector3(.14f, .10f, 0); //not sure why all coordinates are wrong by this factor
+            centerOffset = (screenMax - gridMax) / 2;
         }
 
         static int MaximizeGrid(int cellSizeDim, int maxScreenSize)
@@ -121,6 +119,7 @@ public class Grid
 
     private Vector3 ToScreen(Vector2Int local)
     {
+        local -= new Vector2Int(1, 1);
         return new Vector3(local.x * CellSize.x * scale, local.y * CellSize.y * scale, 10);
     }
 
