@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -73,7 +74,7 @@ public class Highscore : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            SceneManager.LoadScene("World");
+            SceneManager.LoadScene("StartGame");
     }
 
     private void PlaceUI(int x, int y, Sprite sprite)
@@ -97,8 +98,24 @@ public class Highscore : MonoBehaviour
 
         if (stats.Override?.KeepForce is true)
             return (Math.Max(stats.Strength, stats.Override.Strength), Math.Max(stats.Bombs, stats.Override.Bombs), Math.Max(0, stats.Override.AtomicBombs));
-        
+
         return (stats.Strength, stats.Bombs, 0);
+    }
+
+    public static List<List<int>> SortPlayersByWins()
+    {
+        var result = new Dictionary<int, List<int>>();
+
+        foreach (var (number, stat) in PlayerStats)
+        {
+            if (result.TryGetValue(stat.Wins, out var players))
+                players.Add(number);
+            else
+                result[stat.Wins] = new List<int>() { number };
+        }
+        return result.OrderByDescending(x => x.Key)
+                     .Select(x => x.Value)
+                     .ToList();
     }
 
     public record PlayerDetails(int Number, int Strength, int Bombs, int AtomicBombs, bool KeepForce);

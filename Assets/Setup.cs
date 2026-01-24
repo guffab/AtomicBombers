@@ -14,8 +14,8 @@ public class Setup : MonoBehaviour
     public GameObject fontPrefab;
 
     public static int Players { get; private set; } = 2;
-    public static bool Music { get; private set; }
-    public static int LevelOffset { get; private set; }
+    public static bool Music { get; private set; } = true;
+    public static int LevelOffset { get; private set; } = 0;
 
     void Awake()
     {
@@ -47,7 +47,7 @@ public class Setup : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            SceneManager.LoadScene("World");
+            SceneManager.LoadScene("StartGame");
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -56,11 +56,15 @@ public class Setup : MonoBehaviour
         }
     }
 
-    private GameObject PlaceUI(int x, int y, Sprite sprite)
+    private GameObject PlaceUI(int x, int y, Sprite sprite, int sortingOrder = 0)
     {
         var worldPos = Grid.Current.ToWorld(new Vector2Int(x, y));
         var dummy = Instantiate(fontPrefab, worldPos, Quaternion.identity);
-        dummy.GetComponent<SpriteRenderer>().sprite = sprite;
+
+        var renderer = dummy.GetComponent<SpriteRenderer>();
+        renderer.sprite = sprite;
+        renderer.sortingOrder = sortingOrder;
+
         return dummy;
     }
 

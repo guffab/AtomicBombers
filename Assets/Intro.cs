@@ -3,6 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class Intro : MonoBehaviour
 {
+    void Start()
+    {
+        LevelManager.Load();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))

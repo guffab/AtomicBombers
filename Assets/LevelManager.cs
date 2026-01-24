@@ -8,12 +8,12 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    static int currentIndex = 9;
+    static int currentIndex = 0;
     static List<LevelData> Levels;
 
     static LevelManager Instance;
 
-    LevelData Level => Levels[currentIndex];
+    public static LevelData Level => Levels[currentIndex];
     List<Player> players = new();
 
     //prefabs
@@ -39,12 +39,17 @@ public class LevelManager : MonoBehaviour
     public GameObject GhostPrefab;
     public GameObject SurprisePrefab;
 
+    public static void Load()
+    {
+        Levels ??= LoadLevels();
+    }
+
     void Awake()
     {
         Instance = this;
         var grid = new Grid(new Vector2Int(28, 28));
         Levels ??= LoadLevels();
-        currentIndex = (currentIndex + 1) % Levels.Count;
+        currentIndex = (StartGame.GameRound + Setup.LevelOffset) % Levels.Count;
 
         Debug.Log(Level.WorldName + Level.Name);
 
@@ -66,6 +71,11 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(ExecuteAfterWait(5f));
 
         }
+    }
+
+    void OnDestroy()
+    {
+        currentIndex = (StartGame.GameRound + Setup.LevelOffset + 1) % Levels.Count;
     }
 
     public static void Register(Player player)
@@ -95,7 +105,7 @@ public class LevelManager : MonoBehaviour
         if (objects.Have<Player>() || objects.Have<DeadPlayer>())
             return;
 
-        var gridElement = Instance.Level.GetNewItemAt(gridPos);
+        var gridElement = Level.GetNewItemAt(gridPos);
         Instance.PlaceElement(gridElement, gridPos);
     }
 

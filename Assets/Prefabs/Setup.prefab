@@ -144,4 +144,13 @@ MonoBehaviour:
   - {fileID: 865684183, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
   blockSprites:
   - {fileID: 1705448811, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: -1285664904, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: -1956150662, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: 1949163249, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: -146857979, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: -851325778, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: 94564099, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: -1322537383, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: 2143859003, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+  - {fileID: 323937527, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
   fontPrefab: {fileID: 6902090091410893721, guid: e992be017d4c82b3ba95216d50cf288a, type: 3}
