@@ -5,7 +5,7 @@
   "BlockProbabilities": "0000861",
   "BlockStyle": 7,
   "Fill": true,
-  "TimeOfDay": 2,
+  "TimeOfDay": "Dawn",
   "Layout": {
     "7,7": "IndestructibleBlock",
     "8,7": "IndestructibleBlock",

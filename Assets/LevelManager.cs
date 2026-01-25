@@ -49,7 +49,7 @@ public class LevelManager : MonoBehaviour
         Instance = this;
         var grid = new Grid(new Vector2Int(28, 28));
         Levels ??= LoadLevels();
-        currentIndex = (StartGame.GameRound + Setup.LevelOffset) % Levels.Count;
+        currentIndex = (LevelPreview.GameRound + Setup.LevelOffset) % Levels.Count;
 
         Debug.Log(Level.WorldName + Level.Name);
 
@@ -67,15 +67,12 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         if (players.Count <= 1)
-        {
-            StartCoroutine(ExecuteAfterWait(5f));
-
-        }
+            StartCoroutine(ExecuteAfterWait(3f));
     }
 
     void OnDestroy()
     {
-        currentIndex = (StartGame.GameRound + Setup.LevelOffset + 1) % Levels.Count;
+        currentIndex = (LevelPreview.GameRound + Setup.LevelOffset + 1) % Levels.Count;
     }
 
     public static void Register(Player player)
@@ -94,9 +91,7 @@ public class LevelManager : MonoBehaviour
         Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, 0, false), false);
 
         if (players.Count <= 1)
-        {
-            StartCoroutine(ExecuteAfterWait(5f));
-        }
+            StartCoroutine(ExecuteAfterWait(7f));
     }
 
     public static void PlaceNewElement(Vector2Int gridPos)

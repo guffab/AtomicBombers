@@ -14,7 +14,7 @@ using UnityEngine;
 /// <param name="Fill">Wether or not the level grid should be randomly filled with blocks for grid points not defined in the <see cref="Layout"/>.</param>
 /// <param name="Layout">A coordinate+item pair. Example: { "1,1": "Player1", "17,3": "Explosive" }</param>
 /// <param name="HiddenItems">A coordinate+item pair for items that are only revealed after exploding a block.</param>
-public record LevelData(string WorldName, string Name, string ItemProbabilities, string BlockProbabilities, int BlockStyle, bool Fill, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
+public record LevelData(string WorldName, string Name, string ItemProbabilities, string BlockProbabilities, int BlockStyle, bool Fill, LevelData.During TimeOfDay, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
 {
     static readonly System.Random random = new();
     List<GridElement> AvailableItems;
@@ -112,5 +112,15 @@ public record LevelData(string WorldName, string Name, string ItemProbabilities,
         Immortal,
         Ghost,
         Surprise,
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum During
+    {
+        Day = 0,
+
+        Night = 1,
+
+        Dawn = 2,
     }
 }

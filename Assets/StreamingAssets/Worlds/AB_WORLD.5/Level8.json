@@ -5,7 +5,7 @@
   "BlockProbabilities": "0000861",
   "BlockStyle": 9,
   "Fill": true,
-  "TimeOfDay": 0,
+  "TimeOfDay": "Day",
   "Layout": {
     "4,14": "Mine",
     "6,14": "Mine",

@@ -5,7 +5,7 @@
   "BlockProbabilities": "0000861",
   "BlockStyle": 2,
   "Fill": true,
-  "TimeOfDay": 0,
+  "TimeOfDay": "Day",
   "Layout": {
     "12,15": "Bomb",
     "13,15": "Bomb",

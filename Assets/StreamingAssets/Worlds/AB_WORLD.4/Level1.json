@@ -5,7 +5,7 @@
   "BlockProbabilities": "0000861",
   "BlockStyle": 2,
   "Fill": true,
-  "TimeOfDay": 0,
+  "TimeOfDay": "Day",
   "Layout": {
     "2,16": "Player1",
     "3,16": "Empty",
