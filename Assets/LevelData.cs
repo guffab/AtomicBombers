@@ -16,7 +16,6 @@ using UnityEngine;
 /// <param name="HiddenItems">A coordinate+item pair for items that are only revealed after exploding a block.</param>
 public record LevelData(string WorldName, string Name, string ItemProbabilities, string BlockProbabilities, int BlockStyle, bool Fill, LevelData.During TimeOfDay, Dictionary<string, LevelData.GridElement> Layout, Dictionary<string, LevelData.GridElement> HiddenItems)
 {
-    static readonly System.Random random = new();
     List<GridElement> AvailableItems;
     List<GridElement> AvailableBlocks;
 
@@ -34,7 +33,7 @@ public record LevelData(string WorldName, string Name, string ItemProbabilities,
         if (Fill)
         {
             AvailableBlocks ??= GetAvailableBlocks();
-            return AvailableBlocks[random.Next(AvailableBlocks.Count)];
+            return AvailableBlocks[SharedRandom.Next(AvailableBlocks.Count)];
         }
 
         return GridElement.Empty;
@@ -49,7 +48,7 @@ public record LevelData(string WorldName, string Name, string ItemProbabilities,
             return hiddenItem;
 
         AvailableItems ??= GetAvailableItems();
-        return AvailableItems[random.Next(AvailableItems.Count)];
+        return AvailableItems[SharedRandom.Next(AvailableItems.Count)];
     }
 
     private List<GridElement> GetAvailableItems()

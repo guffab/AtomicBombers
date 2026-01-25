@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Player : MonoBehaviour
 {
-    static readonly System.Random random = new();
     static readonly Appearance[] appearances = new Appearance[] { Appearance.Pacman, Appearance.Immortal, Appearance.Sick, Appearance.Ghost };
 
     const int framesPerAnimation = 3;
@@ -336,7 +335,7 @@ public class Player : MonoBehaviour
 
         else if (type is Consumable.Kind.Surprise)
         {
-            appearance = SelectWorst(appearances[random.Next(appearances.Length)]);
+            appearance = SelectWorst(appearances[SharedRandom.Next(appearances.Length)]);
             SetCurrentSprite();
         }
 

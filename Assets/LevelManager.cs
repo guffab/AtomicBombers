@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour
     static LevelManager Instance;
 
     public static LevelData Level => Levels[currentIndex];
+    public static int LevelCount => Levels.Count;
     List<Player> players = new();
 
     //prefabs
