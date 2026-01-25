@@ -74,7 +74,7 @@ public class Highscore : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            SceneManager.LoadScene("StartGame");
+            SceneManager.LoadScene("LevelPreview");
     }
 
     private void PlaceUI(int x, int y, Sprite sprite)

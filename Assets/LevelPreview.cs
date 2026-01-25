@@ -122,7 +122,7 @@ public class LevelPreview : MonoBehaviour
 
         //text (small)
         grid = new Grid(new Vector2Int(16, 16));
-        PlaceText(25, 10, $"ROUND {GameRound}".PadLeft(10));
+        PlaceText(25, 10, $"ROUND {GameRound + 1}".PadLeft(10));
         PlaceText(6, 26, $"WORLD {(GameRound + Setup.LevelOffset) / 10 + 1}");
         PlaceText(6, 22, $"LEVEL {(GameRound + Setup.LevelOffset) % 10 + 1}");
 

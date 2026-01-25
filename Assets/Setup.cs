@@ -47,7 +47,7 @@ public class Setup : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            SceneManager.LoadScene("StartGame");
+            SceneManager.LoadScene("LevelPreview");
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
