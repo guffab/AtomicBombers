@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -128,10 +129,10 @@ public class LevelManager : MonoBehaviour
             LevelData.GridElement.SolidBlock => SolidBlockPrefab,
             LevelData.GridElement.WalkableBlock => WalkableBlockPrefab,
             LevelData.GridElement.Mine => MinePrefab,
-            LevelData.GridElement.Player4 => Player4Prefab,
-            LevelData.GridElement.Player3 => Player3Prefab,
-            LevelData.GridElement.Player2 => Player2Prefab,
-            LevelData.GridElement.Player1 => Player1Prefab,
+            LevelData.GridElement.Player4 => GetPlayerPrefab(4),
+            LevelData.GridElement.Player3 => GetPlayerPrefab(3),
+            LevelData.GridElement.Player2 => GetPlayerPrefab(2),
+            LevelData.GridElement.Player1 => GetPlayerPrefab(1),
             LevelData.GridElement.Light => LightPrefab,
             LevelData.GridElement.KeepForce => KeepForcePrefab,
             LevelData.GridElement.Powder => PowderPrefab,
@@ -156,6 +157,20 @@ public class LevelManager : MonoBehaviour
 
             if (newObject.TryGetComponent<Block>(out var block))
                 block.style = Level.BlockStyle;
+        }
+
+        //local helper
+        GameObject GetPlayerPrefab(int i)
+        {
+            var playerRankings = Highscore.SortPlayersByWins().SelectMany(x => x);
+            return playerRankings.ElementAtOrDefault(i - 1) switch
+            {
+                4 => Player4Prefab,
+                3 => Player3Prefab,
+                2 => Player2Prefab,
+                1 => Player1Prefab,
+                _ => null,
+            };
         }
     }
 
