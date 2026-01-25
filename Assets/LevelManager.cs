@@ -15,6 +15,8 @@ public class LevelManager : MonoBehaviour
 
     public static LevelData Level => Levels[currentIndex];
     public static int LevelCount => Levels.Count;
+    public static int GameRound { get; private set; } = 0;
+
     List<Player> players = new();
 
     //prefabs
@@ -50,7 +52,7 @@ public class LevelManager : MonoBehaviour
         Instance = this;
         var grid = new Grid(new Vector2Int(28, 28));
         Levels ??= LoadLevels();
-        currentIndex = (LevelPreview.GameRound + Setup.LevelOffset) % Levels.Count;
+        currentIndex = (GameRound + Setup.LevelOffset) % Levels.Count;
 
         Debug.Log(Level.WorldName + Level.Name);
 
@@ -71,9 +73,19 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(ExecuteAfterWait(3f));
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameRound--; //because increased on destroy
+            SceneManager.LoadScene("LevelPreview");
+        }
+    }
+
     void OnDestroy()
     {
-        currentIndex = (LevelPreview.GameRound + Setup.LevelOffset + 1) % Levels.Count;
+        GameRound++;
+        currentIndex = (GameRound + Setup.LevelOffset) % Levels.Count;
     }
 
     public static void Register(Player player)
@@ -160,7 +172,7 @@ public class LevelManager : MonoBehaviour
                 var data = JsonConvert.DeserializeObject<LevelData>(json);
                 levelData.Add(data);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
             }
         }

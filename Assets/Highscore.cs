@@ -4,14 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Highscore : MonoBehaviour
+public class Highscore : UIScene
 {
     private static Dictionary<int, Stats> PlayerStats = new();
 
-    public Sprite[] fontSprites;
-    public Sprite[] playerSprites;
     public Sprite[] otherSprites;
-    public GameObject fontPrefab;
 
     void Awake()
     {
@@ -25,46 +22,35 @@ public class Highscore : MonoBehaviour
 
             y -= 4;
 
-            //numbers as string to index into
-            var winstr = Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0');
-            var bombstr = Math.Min(stats.Bombs, 99).ToString().PadLeft(2, '0');
-            var strenstr = Math.Min(stats.Strength, 99).ToString().PadLeft(2, '0');
-
             PlaceUI(1, y, playerSprites[i]);
 
             PlaceUI(3, y, otherSprites[0]);
-            PlaceUI(4, y, fontSprites[winstr[0]]);
-            PlaceUI(5, y, fontSprites[winstr[1]]);
-            PlaceUI(6, y, fontSprites[winstr[2]]);
+            PlaceLargeText(4, y, Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0'));
 
             PlaceUI(8, y, otherSprites[1]);
-            PlaceUI(9, y, fontSprites[winstr[0]]);
-            PlaceUI(10, y, fontSprites[winstr[1]]);
-            PlaceUI(11, y, fontSprites[winstr[2]]);
+            PlaceLargeText(9, y, Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0'));
 
             if (stats.Override.KeepForce)
                 PlaceUI(13, y, otherSprites[otherSprites.Length - 1]);
             else
             {
                 PlaceUI(13, y, otherSprites[2]);
-                PlaceUI(14, y, fontSprites[bombstr[0]]);
-                PlaceUI(15, y, fontSprites[bombstr[1]]);
+                PlaceLargeText(14, y, Math.Min(stats.Bombs, 99).ToString().PadLeft(2, '0'));
 
                 PlaceUI(17, y, otherSprites[3]);
-                PlaceUI(18, y, fontSprites[strenstr[0]]);
-                PlaceUI(19, y, fontSprites[strenstr[1]]);
+                PlaceLargeText(18, y, Math.Min(stats.Strength, 99).ToString().PadLeft(2, '0'));
             }
 
-            if (stats.WonLastRound) //store if this happened this round#
+            if (stats.WonLastRound) //store if this happened this round
             {
                 if (stats.Wins % 10 is 0)
                 {
-                    PlaceUI(10, y - 1, fontSprites['+']);
+                    PlaceText(10, y - 1, "+");
                     PlaceUI(11, y - 1, otherSprites[3]);
                 }
                 else if (stats.Wins % 5 is 0)
                 {
-                    PlaceUI(10, y - 1, fontSprites['+']);
+                    PlaceText(10, y - 1, "+");
                     PlaceUI(11, y - 1, otherSprites[2]);
                 }
             }
@@ -75,13 +61,9 @@ public class Highscore : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
             SceneManager.LoadScene("LevelPreview");
-    }
 
-    private void PlaceUI(int x, int y, Sprite sprite)
-    {
-        var worldPos = Grid.Current.ToWorld(new Vector2Int(x, y));
-        var dummy = Instantiate(fontPrefab, worldPos, Quaternion.identity);
-        dummy.GetComponent<SpriteRenderer>().sprite = sprite;
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.LoadScene("Setup");
     }
 
     public static void AddPlayerDetails(PlayerDetails details, bool winner)
@@ -113,6 +95,10 @@ public class Highscore : MonoBehaviour
             else
                 result[stat.Wins] = new List<int>() { number };
         }
+
+        if (result.Count is 0)
+            return new List<List<int>> { Enumerable.Range(1, Setup.Players).ToList() };
+
         return result.OrderByDescending(x => x.Key)
                      .Select(x => x.Value)
                      .ToList();

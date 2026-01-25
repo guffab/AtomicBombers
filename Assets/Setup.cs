@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Setup : MonoBehaviour
+public class Setup : UIScene
 {
-    public Sprite[] largeFontSprites;
-    public Sprite[] smallFontSprites;
-    public Sprite[] playerSprites;
-    public Sprite[] blockSprites;
-    public GameObject fontPrefab;
-
     public static int Players { get; private set; } = 2;
     public static bool MusicOn { get; private set; } = true;
     public static int LevelOffset { get; private set; } = 0;
@@ -66,15 +61,28 @@ public class Setup : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             SceneManager.LoadScene("LevelPreview");
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         if (Input.GetKeyDown(KeyCode.F1))
         {
             Players = Math.Max(2, (Players + 1) % 5);
             RedrawUI();
         }
-        
+
         if (Input.GetKeyDown(KeyCode.F2))
         {
             MusicOn = !MusicOn;
+            
+            if (GameMusicPlayer.Instance != null)
+                GameMusicPlayer.Instance.GetComponent<AudioSource>().mute = !MusicOn;
+
             RedrawUI();
         }
 
@@ -87,30 +95,6 @@ public class Setup : MonoBehaviour
 
             RedrawUI();
         }
-    }
-
-    private GameObject PlaceUI(int x, int y, Sprite sprite, int sortingOrder = 0)
-    {
-        var worldPos = Grid.Current.ToWorld(new Vector2Int(x, y));
-        var dummy = Instantiate(fontPrefab, worldPos, Quaternion.identity);
-
-        var renderer = dummy.GetComponent<SpriteRenderer>();
-        renderer.sprite = sprite;
-        renderer.sortingOrder = sortingOrder;
-
-        return dummy;
-    }
-
-    private void PlaceText(int x, int y, string text)
-    {
-        for (int i = 0; i < text.Length; i++)
-            PlaceUI(x + i, y, smallFontSprites[text[i] % smallFontSprites.Length]);
-    }
-
-    private void PlaceLargeText(int x, int y, string text)
-    {
-        for (int i = 0; i < text.Length; i++)
-            PlaceUI(x + i, y, largeFontSprites[text[i] % largeFontSprites.Length]);
     }
 
     private void PlacePlayers(int x, int y)
