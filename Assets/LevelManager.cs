@@ -42,6 +42,8 @@ public class LevelManager : MonoBehaviour
     public GameObject ImmortalPrefab;
     public GameObject GhostPrefab;
     public GameObject SurprisePrefab;
+    public GameObject Foreground;
+    public GameObject Background;
 
     public static void Load()
     {
@@ -66,6 +68,17 @@ public class LevelManager : MonoBehaviour
                 PlaceElement(gridElement, gridPos);
             }
         }
+
+        var darkness = Level.TimeOfDay switch
+        {
+            LevelData.During.Day => 0f,
+            LevelData.During.Night => 253 / 255f,
+            LevelData.During.Dawn => 185 / 255f,
+            _ => SharedRandom.Next(250) / 255f
+        };
+
+        var renderer = Instance.Foreground.GetComponent<SpriteRenderer>();
+        renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, darkness);
     }
 
     void Start()
@@ -116,6 +129,16 @@ public class LevelManager : MonoBehaviour
 
         var gridElement = Level.GetNewItemAt(gridPos);
         Instance.PlaceElement(gridElement, gridPos);
+    }
+
+    public static void ChangeLight(bool lightOn)
+    {
+        var renderer = Instance.Foreground.GetComponent<SpriteRenderer>();
+
+        if (lightOn)
+            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0);
+        else
+            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 254f / 255f);
     }
 
     private void PlaceElement(LevelData.GridElement gridElement, Vector2Int gridPos)

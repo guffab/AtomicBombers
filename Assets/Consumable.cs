@@ -31,12 +31,15 @@ public class Consumable : MonoBehaviour
         if (other.gameObject.TryGetComponent<Player>(out var player))
         {
             player.Consume(Type);
-            Remove();
+            Remove(true);
         }
     }
 
-    public void Remove()
+    public void Remove(bool consumed = false)
     {
+        if (Type is Kind.Light)
+            LevelManager.ChangeLight(consumed);
+        
         Grid.Current.Remove(gameObject);
         Destroy(gameObject);
     }
