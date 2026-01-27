@@ -7,17 +7,6 @@ public class Consumable : MonoBehaviour
 {
     static readonly System.Random random = new();
     static readonly List<Kind> options = Enum.GetValues(typeof(Kind)).Cast<Kind>().Skip(1).ToList();
-
-    public Sprite LightSprite;
-    public Sprite KeepForceSprite;
-    public Sprite PowderSprite;
-    public Sprite BombSprite;
-    public Sprite AtomicbombSprite;
-    public Sprite MegabombSprite;
-    public Sprite PacmanSprite;
-    public Sprite GhostSprite;
-    public Sprite ImmortalSprite;
-    public Sprite SurpriseSprite;
     public Kind Type;
 
     void Start()

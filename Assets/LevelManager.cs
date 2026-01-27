@@ -9,12 +9,11 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    static int currentIndex = 0;
     static List<LevelData> Levels;
 
     static LevelManager Instance;
 
-    public static LevelData Level => Levels[currentIndex];
+    public static LevelData Level => Levels[(GameRound + Setup.LevelOffset) % Levels.Count];
     public static int LevelCount => Levels.Count;
     public static int GameRound { get; private set; } = 0;
 
@@ -55,7 +54,6 @@ public class LevelManager : MonoBehaviour
         Instance = this;
         var grid = new Grid(new Vector2Int(28, 28));
         Levels ??= LoadLevels();
-        currentIndex = (GameRound + Setup.LevelOffset) % Levels.Count;
 
         Debug.Log(Level.WorldName + Level.Name);
 
@@ -99,7 +97,6 @@ public class LevelManager : MonoBehaviour
     void OnDestroy()
     {
         GameRound++;
-        currentIndex = (GameRound + Setup.LevelOffset) % Levels.Count;
     }
 
     public static void Register(Player player)

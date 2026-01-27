@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: CurrentState
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 89808019226992972, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4714213560796584887, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
     - target: {fileID: 2290138766393515516, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Name
       value: SlightlyDamagedBlock

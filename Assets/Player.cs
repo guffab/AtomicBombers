@@ -108,6 +108,7 @@ public class Player : MonoBehaviour
                 if (appearance is Appearance.Pacman)
                     appearance = AtomicBombs > 0 ? Appearance.Atomic : Appearance.Normal;
             }
+            SetCurrentSprite();
         }
 
         if (moveInput != Vector2Int.zero)
@@ -211,7 +212,17 @@ public class Player : MonoBehaviour
         playerStruct.GetType().GetMethod("Disable").Invoke(playerStruct, new object[0]);
     }
 
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        CollisionCheck(collision);
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
+    {
+        CollisionCheck(collision);
+    }
+
+    private void CollisionCheck(Collision2D collision)
     {
         if (!collision.gameObject.TryGetComponent<Player>(out var other))
             return;

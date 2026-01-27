@@ -19,10 +19,14 @@ PrefabInstance:
     - target: {fileID: 89808019226992972, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1688246371, guid: f00b12cfcb72b47a08512206004043ad, type: 3}
+      objectReference: {fileID: -7028016120108009675, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+    - target: {fileID: 89808019226992972, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2290138766393515516, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Name
-      value: HeavyDamagedBlock
+      value: HeavilyDamagedBlock
       objectReference: {fileID: 0}
     - target: {fileID: 4259634422715894196, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_LocalPosition.x

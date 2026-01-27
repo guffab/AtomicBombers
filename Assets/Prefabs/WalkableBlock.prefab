@@ -19,7 +19,11 @@ PrefabInstance:
     - target: {fileID: 89808019226992972, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -2544099004350548168, guid: 4e43c7a117c8022f2936370662d9b3e3, type: 3}
+      objectReference: {fileID: 175007401423201, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+    - target: {fileID: 89808019226992972, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2290138766393515516, guid: aefd4b814bc726475b7e1c7daf7b6472, type: 3}
       propertyPath: m_Name
       value: WalkableBlock

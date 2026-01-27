@@ -22,7 +22,7 @@ public class Setup : UIScene
 
         var grid = new Grid(new Vector2Int(28, 28));
 
-        var block = blockSprites[0];
+        var block = blockSprites[LevelManager.Level.BlockStyle - 1];
 
         for (int i = 1; i <= 21; i++)
             PlaceUI(i, 1, block);
@@ -79,7 +79,7 @@ public class Setup : UIScene
         if (Input.GetKeyDown(KeyCode.F2))
         {
             MusicOn = !MusicOn;
-            
+
             if (GameMusicPlayer.Instance != null)
                 GameMusicPlayer.Instance.GetComponent<AudioSource>().mute = !MusicOn;
 
