@@ -295,13 +295,7 @@ public class Player : MonoBehaviour
 
     internal void Consume(Consumable.Kind type)
     {
-        if (type is Consumable.Kind.Light)
-        {
-            //turn on light
-            Debug.Log("Light turned on");
-        }
-
-        else if (type is Consumable.Kind.KeepForce)
+        if (type is Consumable.Kind.KeepForce)
             KeepForce = true;
 
         else if (type is Consumable.Kind.Powder)

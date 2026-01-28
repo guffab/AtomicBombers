@@ -13,6 +13,8 @@ public class Explosion : MonoBehaviour
 
     void Start()
     {
+        LevelManager.Register(this);
+
         foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
         {
             if (element == null || element.TryGetComponent<Explosion>(out _))
@@ -51,6 +53,7 @@ public class Explosion : MonoBehaviour
 
         GetComponent<Renderer>().enabled = false;
         Grid.Remove(gameObject);
+        LevelManager.Unregister(this);
     }
 
     //referenced by animation

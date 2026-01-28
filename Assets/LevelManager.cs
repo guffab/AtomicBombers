@@ -18,6 +18,7 @@ public class LevelManager : MonoBehaviour
     public static int GameRound { get; private set; } = 0;
 
     List<Player> players = new();
+    List<Explosion> explosions = new();
 
     //prefabs
     public GameObject IndestructibleBlockPrefab;
@@ -43,6 +44,7 @@ public class LevelManager : MonoBehaviour
     public GameObject SurprisePrefab;
     public GameObject Foreground;
     public GameObject Background;
+    private LevelData.During lightLevel;
 
     public static void Load()
     {
@@ -67,22 +69,17 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        var darkness = Level.TimeOfDay switch
-        {
-            LevelData.During.Day => 0f,
-            LevelData.During.Night => 253 / 255f,
-            LevelData.During.Dawn => 185 / 255f,
-            _ => SharedRandom.Next(250) / 255f
-        };
 
-        var renderer = Instance.Foreground.GetComponent<SpriteRenderer>();
-        renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, darkness);
     }
 
     void Start()
     {
+        lightLevel = Level.TimeOfDay;
+
         if (players.Count <= 1)
             StartCoroutine(ExecuteAfterWait(3f));
+
+        StartCoroutine(HandleDangerLight());
     }
 
     void Update()
@@ -92,6 +89,11 @@ public class LevelManager : MonoBehaviour
             GameRound--; //because increased on destroy
             SceneManager.LoadScene("LevelPreview");
         }
+
+        if (explosions.Any())
+            TempChangeLight(LevelData.During.Day);
+        else
+            TempChangeLight(lightLevel);
     }
 
     void OnDestroy()
@@ -99,15 +101,10 @@ public class LevelManager : MonoBehaviour
         GameRound++;
     }
 
-    public static void Register(Player player)
-    {
-        Instance.players.Add(player);
-    }
-
-    public static void Unregister(Player player)
-    {
-        Instance.UnregisterInstance(player);
-    }
+    public static void Register(Player player) => Instance.players.Add(player);
+    public static void Unregister(Player player) => Instance.UnregisterInstance(player);
+    public static void Register(Explosion explosion) => Instance.explosions.Add(explosion);
+    public static void Unregister(Explosion explosion) => Instance.explosions.Remove(explosion);
 
     private void UnregisterInstance(Player player)
     {
@@ -130,12 +127,21 @@ public class LevelManager : MonoBehaviour
 
     public static void ChangeLight(bool lightOn)
     {
-        var renderer = Instance.Foreground.GetComponent<SpriteRenderer>();
+        Instance.lightLevel = lightOn ? LevelData.During.Day : LevelData.During.Night;
+    }
 
-        if (lightOn)
-            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0);
-        else
-            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 254f / 255f);
+    private void TempChangeLight(LevelData.During during)
+    {
+        var darkness = during switch
+        {
+            LevelData.During.Day => 0,
+            LevelData.During.Night => 253,
+            LevelData.During.Dawn or (LevelData.During)3 => 185, //not sure what this value means
+            _ => SharedRandom.Next(250)
+        };
+
+        var renderer = Instance.Foreground.GetComponent<SpriteRenderer>();
+        renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, darkness / 255f);
     }
 
     private void PlaceElement(LevelData.GridElement gridElement, Vector2Int gridPos)
@@ -223,5 +229,26 @@ public class LevelManager : MonoBehaviour
             Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, player.AtomicBombs, player.KeepForce), true);
 
         SceneManager.LoadScene("Highscore");
+    }
+
+    private IEnumerator HandleDangerLight()
+    {
+        while (true)
+        {
+            if (!players.Any(x => x.appearance is Player.Appearance.Pacman))
+            {
+                yield return new WaitForSeconds(0.01f);
+                continue;
+            }
+
+            //red blinking effect
+            var renderer = Instance.Background.GetComponent<SpriteRenderer>();
+            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 1);
+
+            yield return new WaitForSeconds(.4f);
+            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0);
+
+            yield return new WaitForSeconds(.4f);
+        }
     }
 }
