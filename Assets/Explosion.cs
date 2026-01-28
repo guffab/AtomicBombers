@@ -17,25 +17,26 @@ public class Explosion : MonoBehaviour
 
         foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
         {
-            if (element == null || element.TryGetComponent<Explosion>(out _))
-                continue;
-
-            if (element.TryGetComponent<ExplosiveBase>(out var mine))
+            if (element != null && element.TryGetComponent<ExplosiveBase>(out var mine))
                 mine.Explode(Strength, Unstoppable);
 
-            else if (element.TryGetComponent<Player>(out var player))
-            {
-                player.Kill();
-                hasKilledPlayer = true;
-            }
+                #warning small delay?
         }
     }
 
-    #warning add a collider so that all bombs are immediately annihilated when nearby
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent<Player>(out var player))
+        {
+            player.Kill();
+            hasKilledPlayer = true;
+        }
+    }
 
     //referenced by animation
     public void Hide()
     {
+        GetComponent<Collider2D>().enabled = false;
         foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
         {
             if (element == null || element.TryGetComponent<Explosion>(out _))
