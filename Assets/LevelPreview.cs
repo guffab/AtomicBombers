@@ -116,18 +116,19 @@ public class LevelPreview : UIScene
 
         //text (large)
         grid = new Grid(new Vector2Int(28, 1));
-        PlaceLargeText(4, 24 * 16 - 5, LevelManager.Level.WorldName);
-        PlaceLargeText(4, 20 * 16 - 5, LevelManager.Level.Name);
+        PlaceLargeText(4, 25 * 16 + 4, LevelManager.Level.WorldName);
+        PlaceLargeText(4, 21 * 16, LevelManager.Level.Name);
 
         //text (small)
         grid = new Grid(new Vector2Int(16, 16));
-        PlaceText(25, 10, $"ROUND {LevelManager.GameRound + 1}".PadLeft(10));
         PlaceText(6, 26, $"WORLD {(LevelManager.GameRound + Setup.LevelOffset) / 10 + 1}");
         PlaceText(6, 22, $"LEVEL {(LevelManager.GameRound + Setup.LevelOffset) % 10 + 1}");
 
         PlaceText(6, 17, $"DURING {LevelManager.Level.TimeOfDay.ToString().ToUpper()}");
         PlaceText(6, 16, "OPT.  : *****");
         PlaceText(6, 15, "ILL.  : **");
+
+        PlaceText(28, 10, $"ROUND {LevelManager.GameRound + 1}".PadLeft(10));
     }
 
     void Update()

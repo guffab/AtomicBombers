@@ -13,6 +13,8 @@ public class Grid
     [HideInInspector] public Vector2Int CellSize { get; }
 
     static Vector3 centerOffset;
+    static Vector3 worldMin;
+    static Vector3 worldSize;
     static float scale;
 
     public Grid(Vector2Int cellSize)
@@ -23,11 +25,21 @@ public class Grid
 
         if (scale is 0) //not initialized
         {
-            scale = Camera.main.pixelHeight / 480;
+            scale = Camera.main.pixelHeight / 480f;
 
             var gridMax = Camera.main.ScreenToWorldPoint(ToScreen(Dimensions));
+            var gridMin = Camera.main.ScreenToWorldPoint(ToScreen(new Vector2Int(1, 1)));
             var screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight, 10));
             centerOffset = (screenMax - gridMax) / 2;
+
+            worldSize = gridMax - gridMin;
+            worldMin = gridMin + centerOffset;
+        }
+
+        Vector3 ToScreen(Vector2Int local)
+        {
+            local -= new Vector2Int(1, 1);
+            return new Vector3(local.x * CellSize.x * scale, local.y * CellSize.y * scale, 10);
         }
 
         static int MaximizeGrid(int cellSizeDim, int maxScreenSize)
@@ -109,18 +121,16 @@ public class Grid
         return pos;
     }
 
-    public Vector3 ToWorld(Vector2Int v, bool raw = false)
+    public Vector3 ToWorld(Vector2Int local, bool raw = false)
     {
         if (!raw)
-            v = Wrap(v);
+            local = Wrap(local);
 
-        return Camera.main.ScreenToWorldPoint(ToScreen(v)) + centerOffset;
-    }
-
-    private Vector3 ToScreen(Vector2Int local)
-    {
         local -= new Vector2Int(1, 1);
-        return new Vector3(local.x * CellSize.x * scale, local.y * CellSize.y * scale, 10);
+        var u = local.x / (Dimensions.x - 1f);
+        var v = local.y / (Dimensions.y - 1f);
+
+        return worldMin + new Vector3(u * worldSize.x, v * worldSize.y, 10);
     }
 
     private Vector2Int Wrap(Vector2Int raw)
