@@ -104,11 +104,16 @@ public class Player : MonoBehaviour
     {
         if (sicknessTimer > 0)
             sicknessTimer -= Time.deltaTime;
-
-        else if (appearance is not Appearance.Pacman)
+        else
         {
-            appearance = Appearance.Normal;
-            ResetSickness();
+            if (appearance is not Appearance.Pacman)
+            {
+                if (Grid.GetObjectsAtSamePlace(gameObject).Any(x => x.TryGetComponent<Block>(out var block) && block.state is Block.State.Solid))
+                    Kill();
+
+                appearance = Appearance.Normal;
+                ResetSickness();
+            }
         }
 
         if (appearance is Appearance.Atomic && AtomicBombs < 1)
@@ -313,7 +318,7 @@ public class Player : MonoBehaviour
 
             if (!blink)
                 return (int)appearance;
-            
+
             return hasAtomics ? (int)Appearance.Atomic : (int)Appearance.Normal;
         }
     }

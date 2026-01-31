@@ -87,6 +87,6 @@ public abstract class ExplosiveBase : MonoBehaviour
         if (unstoppable)
             return true;
         
-        return !objects.Have<Player>() && !objects.Have<Consumable>() && !objects.Have<DeadPlayer>();
+        return (!objects.Have<Player>(out var player) || player.appearance is Player.Appearance.Immortal) && !objects.Have<Consumable>() && !objects.Have<DeadPlayer>();
     }
 }
