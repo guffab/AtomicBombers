@@ -15,13 +15,17 @@ public class Player : MonoBehaviour
     Vector2Int moveInput = Vector2Int.zero;
     bool plantBomb = false;
 
-    const float moveFast = 3.5f;
-    const float moveSlow = 1f;
+    const float fastSpeed = 3.5f;
+    const float slowSpeed = 1f;
+    const float fastBomb = .8f;
+    const float slowBomb = 5.5f;
 
     bool isMoving = false;
     Vector2Int bufferedDirection = Vector2Int.zero;
     float bufferTime = 0.01f;
     float bufferTimer = 0f;
+    float currentSpeed;
+    float currentBombDelay;
 
     Vector2Int lastGridPos;
     Vector3 targetWorldPos;
@@ -35,13 +39,13 @@ public class Player : MonoBehaviour
     public int AtomicBombs { get; private set; } = 0;
     public bool KeepForce { get; private set; } = false;
 
-    Rigidbody2D rb;
     SpriteRenderer sr;
     InputAction moveAction;
     InputAction plantBombAction;
 
     public int playerNumber;
     public float speed = 2f;
+    public float bombDelay = 1.5f;
     public Sprite[] sprites;
     public Appearance appearance;
     public float animationFrameTime = 0.15f;
@@ -49,12 +53,12 @@ public class Player : MonoBehaviour
     public GameObject DeadPlayerPrefab;
     public GameObject ExplodingBombPrefab;
     public GameObject ExplodingAtomicBombPrefab;
+    private bool invertedMovement;
 
     private Grid Grid => Grid.Current;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         actions = new InputSystem_Actions();
         moveAction = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
@@ -69,6 +73,8 @@ public class Player : MonoBehaviour
         lastGridPos = Grid.GetPosition(gameObject);
         targetWorldPos = Grid.ToWorld(lastGridPos);
         availableBombs = Bombs;
+        currentSpeed = speed;
+        currentBombDelay = bombDelay;
     }
 
     // called every frame
@@ -103,7 +109,7 @@ public class Player : MonoBehaviour
                 var bomb = bombObject.GetComponent<ExplodingBomb>();
                 bomb.player = this;
                 bomb.strength = Strength;
-                bomb.delay = 1.5f;
+                bomb.delay = currentBombDelay;
 
                 if (appearance is Appearance.Pacman)
                     appearance = AtomicBombs > 0 ? Appearance.Atomic : Appearance.Normal;
@@ -152,7 +158,7 @@ public class Player : MonoBehaviour
             transform.position = Vector3.MoveTowards(
                 transform.position,
                 targetWorldPos,
-                speed * Time.deltaTime
+                currentSpeed * Time.deltaTime
             );
         else
         {
@@ -169,7 +175,7 @@ public class Player : MonoBehaviour
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     leftFakePos,
-                    speed * Time.deltaTime
+                    currentSpeed * Time.deltaTime
                 );
 
                 //jump to other side
@@ -196,6 +202,9 @@ public class Player : MonoBehaviour
                 moveInput = new Vector2Int(Math.Sign(rawInput.x), 0);
             else
                 moveInput = new Vector2Int(0, Math.Sign(rawInput.y));
+
+            if (invertedMovement)
+                moveInput = -moveInput;
         };
         moveAction.canceled += ctx => moveInput = Vector2Int.zero;
 
@@ -245,6 +254,14 @@ public class Player : MonoBehaviour
 
         if (appearance is Appearance.Ghost or Appearance.Immortal or Appearance.Sick && other.appearance is Appearance.Atomic or Appearance.Normal)
         {
+            if (appearance is Appearance.Sick)
+            {
+                other.currentSpeed = currentSpeed;
+                other.currentBombDelay = currentBombDelay;
+                other.invertedMovement = invertedMovement;
+                other.ResetSicknessTimer();
+            }
+
             other.appearance = appearance;
             other.SetCurrentSprite();
 #warning for sickness the stats also need to be set
@@ -323,25 +340,37 @@ public class Player : MonoBehaviour
         else if (type is Consumable.Kind.Pacman)
         {
             appearance = SelectWorst(Appearance.Pacman);
-            SetCurrentSprite();
+            ResetSickness();
         }
 
         else if (type is Consumable.Kind.Immortal)
         {
             appearance = SelectWorst(Appearance.Immortal);
-            SetCurrentSprite();
+            ResetSickness();
         }
 
         else if (type is Consumable.Kind.Ghost)
         {
             appearance = SelectWorst(Appearance.Ghost);
-            SetCurrentSprite();
+            ResetSickness();
         }
 
         else if (type is Consumable.Kind.Surprise)
         {
-            appearance = SelectWorst(appearances[SharedRandom.Next(appearances.Length)]);
-            SetCurrentSprite();
+            var newAppearance = Appearance.Sick;// appearances[SharedRandom.Next(appearances.Length)];
+            appearance = SelectWorst(newAppearance);
+            ResetSickness();
+
+            if (newAppearance is Appearance.Sick)
+            {
+                var sicknessType = SharedRandom.Next(5);
+
+                if (sicknessType is 0) currentSpeed = slowSpeed;
+                else if (sicknessType is 1) currentSpeed = fastSpeed;
+                else if (sicknessType is 2) currentBombDelay = slowBomb;
+                else if (sicknessType is 3) currentBombDelay = fastBomb;
+                else if (sicknessType is 4) invertedMovement = true;
+            }
         }
 
         Appearance SelectWorst(Appearance newAppearance)
@@ -357,6 +386,15 @@ public class Player : MonoBehaviour
 
             return newAppearance;
         }
+    }
+
+    private void ResetSickness()
+    {
+        currentSpeed = speed;
+        currentBombDelay = bombDelay;
+        invertedMovement = false;
+
+        SetCurrentSprite();
     }
 
     public enum Direction

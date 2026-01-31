@@ -57,8 +57,6 @@ public class LevelManager : MonoBehaviour
         var grid = new Grid(new Vector2Int(28, 28));
         Levels ??= LoadLevels();
 
-        Debug.Log(Level.WorldName + Level.Name);
-
         for (int x = 1; x <= grid.Dimensions.x; x++)
         {
             for (int y = 1; y <= grid.Dimensions.y; y++)
@@ -68,8 +66,6 @@ public class LevelManager : MonoBehaviour
                 PlaceElement(gridElement, gridPos);
             }
         }
-
-
     }
 
     void Start()
