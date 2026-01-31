@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     Vector2Int bufferedDirection = Vector2Int.zero;
     float bufferTimer = 0f;
     float sicknessTimer;
+    bool blink;
     float currentSpeed;
     float currentBombDelay;
 
@@ -77,6 +78,25 @@ public class Player : MonoBehaviour
         availableBombs = Bombs;
         currentSpeed = speed;
         currentBombDelay = bombDelay;
+
+        StartCoroutine(BlinkSetter());
+    }
+
+    private IEnumerator BlinkSetter()
+    {
+        while (true)
+        {
+            if (sicknessTimer is <= 0 or >= 4)
+                yield return new WaitForSeconds(0.01f);
+
+            yield return new WaitForSeconds(0.1f);
+
+            if (sicknessTimer is >= 0 and <= 4)
+                blink = true;
+
+            yield return new WaitForSeconds(0.1f);
+            blink = false;
+        }
     }
 
     // called every frame
@@ -91,21 +111,11 @@ public class Player : MonoBehaviour
             ResetSickness();
         }
 
-        if (sicknessTimer > 0 && sicknessTimer < 4)
-        {
-            //blinking
-        }
-
         if (appearance is Appearance.Atomic && AtomicBombs < 1)
-        {
             appearance = Appearance.Normal;
-            SetCurrentSprite();
-        }
+
         else if (appearance is Appearance.Normal && AtomicBombs > 0)
-        {
             appearance = Appearance.Atomic;
-            SetCurrentSprite();
-        }
 
         if (plantBomb)
         {
@@ -129,7 +139,6 @@ public class Player : MonoBehaviour
                 if (appearance is Appearance.Pacman)
                     appearance = AtomicBombs > 0 ? Appearance.Atomic : Appearance.Normal;
             }
-            SetCurrentSprite();
         }
 
         if (moveInput != Vector2Int.zero)
@@ -143,7 +152,6 @@ public class Player : MonoBehaviour
                 direction = moveInput.y > 0 ? Direction.Up : Direction.Down;
 
             timer += Time.deltaTime;
-            SetCurrentSprite();
         }
 
         if (!isMoving && bufferedDirection != Vector2Int.zero)
@@ -162,6 +170,8 @@ public class Player : MonoBehaviour
             bufferTimer -= Time.deltaTime;
         else
             bufferedDirection = Vector2Int.zero;
+
+        SetCurrentSprite();
     }
 
     void LateUpdate()
@@ -285,11 +295,27 @@ public class Player : MonoBehaviour
     {
         int frame = Mathf.FloorToInt(timer / animationFrameTime) % framesPerAnimation;
 
+        int appearanceOffset = GetAppearanceOffset(appearance, sicknessTimer, blink, AtomicBombs > 0);
+
         //player + style offset
-        int offset = (playerNumber - 1) * 12 + 48 * (int)appearance;
+        int offset = (playerNumber - 1) * 12 + 48 * appearanceOffset;
         int index = (int)direction * framesPerAnimation + frame + offset;
 
         sr.sprite = sprites[index];
+
+        static int GetAppearanceOffset(Appearance appearance, float sicknessTimer, bool blink, bool hasAtomics)
+        {
+            if (appearance is Appearance.Normal or Appearance.Atomic or Appearance.Pacman)
+                return (int)appearance;
+
+            if (sicknessTimer <= 0 || sicknessTimer >= 4)
+                return (int)appearance;
+
+            if (!blink)
+                return (int)appearance;
+            
+            return hasAtomics ? (int)Appearance.Atomic : (int)Appearance.Normal;
+        }
     }
 
     public void Kill()
@@ -370,7 +396,7 @@ public class Player : MonoBehaviour
 
         else if (type is Consumable.Kind.Surprise)
         {
-            var newAppearance = Appearance.Sick;// appearances[SharedRandom.Next(appearances.Length)];
+            var newAppearance = appearances[SharedRandom.Next(appearances.Length)];
             appearance = SelectWorst(newAppearance);
             ResetSickness();
 
@@ -394,7 +420,7 @@ public class Player : MonoBehaviour
             if (appearance is Appearance.Pacman or Appearance.Sick)
                 return appearance;
 
-            if (appearance is Appearance.Immortal or Appearance.Ghost)
+            if (appearance is Appearance.Immortal)
                 return newAppearance is Appearance.Sick ? newAppearance : appearance;
 
             return newAppearance;
@@ -410,11 +436,6 @@ public class Player : MonoBehaviour
         SetCurrentSprite();
         if (appearance is not (Appearance.Normal or Appearance.Atomic or Appearance.Pacman))
             sicknessTimer = sicknessTime;
-        
-        //ghost -> immortal is valid
-        //after 11 seconds -> start blinking
-        //after 4 more seconds -> return to normal
-        //speed has no visible sickness
     }
 
     public enum Direction
