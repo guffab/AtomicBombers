@@ -33,7 +33,6 @@ public class Player : MonoBehaviour
     Vector2Int lastGridPos;
     Vector3 targetWorldPos;
     Direction direction;
-    InputSystem_Actions actions;
 
     internal int availableBombs;
 
@@ -43,6 +42,7 @@ public class Player : MonoBehaviour
     public bool KeepForce { get; private set; } = false;
 
     SpriteRenderer sr;
+    InputSystem_Actions actions;
     InputAction moveAction;
     InputAction plantBombAction;
 
@@ -63,9 +63,15 @@ public class Player : MonoBehaviour
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        
         actions = new InputSystem_Actions();
+        var rebinds = PlayerPrefs.GetString("Rebinds");
+        if (!string.IsNullOrEmpty(rebinds))
+            actions.LoadBindingOverridesFromJson(rebinds);
+
         moveAction = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
         plantBombAction = actions.FindAction($"Player{playerNumber}/PlantBomb", throwIfNotFound: true);
+        
         LevelManager.Register(this);
     }
 
