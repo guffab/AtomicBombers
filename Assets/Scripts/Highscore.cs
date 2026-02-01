@@ -22,7 +22,7 @@ public class Highscore : UIScene
 
             y -= 4;
 
-            PlaceUI(1, y, playerSprites[i]);
+            PlaceUI(1, y, playerSprites[Setup.AvatarOffsets[i + 1] - 1]);
 
             PlaceUI(3, y, otherSprites[0]);
             PlaceLargeText(4, y, Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0'));

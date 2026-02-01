@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     const float fastSpeed = 3.5f;
     const float slowSpeed = 1f;
     const float fastBomb = .8f;
-    const float slowBomb = 5.5f;
+    const float slowBomb = 6.5f;
     const float bufferTime = 0.01f;
     const float sicknessTime = 15f;
 
@@ -309,7 +309,7 @@ public class Player : MonoBehaviour
         int appearanceOffset = GetAppearanceOffset(appearance, sicknessTimer, blink, AtomicBombs > 0);
 
         //player + style offset
-        int offset = (playerNumber - 1) * 12 + 48 * appearanceOffset;
+        int offset = (Setup.AvatarOffsets[playerNumber] - 1) * 12 + 48 * appearanceOffset;
         int index = (int)direction * framesPerAnimation + frame + offset;
 
         sr.sprite = sprites[index];

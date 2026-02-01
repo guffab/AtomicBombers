@@ -11,6 +11,13 @@ public class Setup : UIScene
     public static int Players { get; private set; } = 2;
     public static bool MusicOn { get; private set; } = true;
     public static int LevelOffset { get; private set; } = 0;
+    public static Dictionary<int, int> AvatarOffsets = new()
+    {
+        {1, 1},
+        {2, 2},
+        {3, 3},
+        {4, 4},
+    };
 
     InputSystem_Actions actions;
     bool controlSetupMode = false;
@@ -51,9 +58,17 @@ public class Setup : UIScene
             for (int i = 2; i <= 20; i++)
                 PlaceUI(i, 7, block);
 
+            //text (large)
             PlaceLargeText(5, 15, "CONTROL SETUP");
 
+            //text (small)
             grid = new Grid(new Vector2Int(16, 16));
+
+            for (int i = 0; i < Players; i++)
+            {
+                PlaceText(6, 21 - i * 2, $"F{i + 1} - PLAYER {i + 1}:");
+                PlaceUI(6 + 15, 21 - i * 2, playerSprites[AvatarOffsets[i + 1] - 1]);
+            }
 
             var moveComposite = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
             var keys = moveComposite.bindings.Select((binding, index) => (binding, index)).Where(x => x.binding.isPartOfComposite).Select(x => x.index).ToArray();
@@ -101,6 +116,18 @@ public class Setup : UIScene
                 controlSetupMode = false;
                 PlayerPrefs.SetString("Rebinds", actions.SaveBindingOverridesAsJson());
             }
+
+            if (Input.GetKeyDown(KeyCode.F1))
+                AvatarOffsets[1] = (AvatarOffsets[1] % 4) + 1;
+
+            if (Input.GetKeyDown(KeyCode.F2))
+                AvatarOffsets[2] = (AvatarOffsets[2] % 4) + 1;
+
+            if (Input.GetKeyDown(KeyCode.F3))
+                AvatarOffsets[3] = (AvatarOffsets[3] % 4) + 1;
+
+            if (Input.GetKeyDown(KeyCode.F4))
+                AvatarOffsets[4] = (AvatarOffsets[4] % 4) + 1;
 
             if (Input.GetKeyDown(KeyCode.F5))
                 playerNumber = (playerNumber % Players) + 1;
@@ -164,7 +191,7 @@ public class Setup : UIScene
     private void RebindKey(string name)
     {
         var action = actions.FindAction($"Player{playerNumber}/{name}", throwIfNotFound: true);
-        
+
         action.PerformInteractiveRebinding(0)
               .WithControlsExcluding("Mouse")
               .WithControlsExcluding("<Keyboard>/escape")
@@ -190,6 +217,6 @@ public class Setup : UIScene
     private void PlacePlayers(int x, int y)
     {
         for (int i = 0; i < Players; i++)
-            PlaceUI(x + 2 * i, y, playerSprites[i]);
+            PlaceUI(x + 2 * i, y, playerSprites[AvatarOffsets[i + 1] - 1]);
     }
 }

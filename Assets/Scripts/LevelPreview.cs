@@ -142,7 +142,7 @@ public class LevelPreview : UIScene
 
     private void PlacePlayer(int x, int y, int playerNumber, Sprite extraSprite = null)
     {
-        PlaceUI(x, y, playerSprites[playerNumber - 1], -1);
+        PlaceUI(x, y, playerSprites[Setup.AvatarOffsets[playerNumber] - 1], -1);
         PlaceUI(x, y, extraSprite, 1);
     }
 }
