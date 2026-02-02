@@ -62,12 +62,12 @@ public class Setup : UIScene
             PlaceLargeText(5, 15, "CONTROL SETUP");
 
             //text (small)
-            grid = new Grid(new Vector2Int(16, 16));
+            grid = new Grid(new Vector2Int(16, 1));
 
             for (int i = 0; i < Players; i++)
             {
-                PlaceText(6, 21 - i * 2, $"F{i + 1} - PLAYER {i + 1}:");
-                PlaceUI(6 + 15, 21 - i * 2, playerSprites[AvatarOffsets[i + 1] - 1]);
+                PlaceText(6, (21 - i * 2) * 16, $"F{i + 1} - PLAYER {i + 1}:");
+                PlaceUI(6 + 15, (21 - i * 2) * 16 + 6, playerSprites[AvatarOffsets[i + 1] - 1]);
             }
 
             var moveComposite = actions.FindAction($"Player{playerNumber}/Move", throwIfNotFound: true);
@@ -75,12 +75,12 @@ public class Setup : UIScene
 
             var fireAction = actions.FindAction($"Player{playerNumber}/PlantBomb", throwIfNotFound: true);
 
-            PlaceText(6, 10, $"F5 - KEYBOARD CONFIG: PLAYER {playerNumber}");
-            PlaceText(7, 8, $"1 - UP   : {moveComposite.GetBindingDisplayString(keys[0]).ToUpper()}");
-            PlaceText(7, 7, $"2 - DOWN : {moveComposite.GetBindingDisplayString(keys[1]).ToUpper()}");
-            PlaceText(7, 6, $"3 - LEFT : {moveComposite.GetBindingDisplayString(keys[2]).ToUpper()}");
-            PlaceText(7, 5, $"4 - RIGHT: {moveComposite.GetBindingDisplayString(keys[3]).ToUpper()}");
-            PlaceText(7, 4, $"5 - FIRE : {fireAction.GetBindingDisplayString(0).ToUpper()}");
+            PlaceText(6, 9 * 16, $"F5 - KEYBOARD CONFIG: PLAYER {playerNumber}");
+            PlaceText(7, 7 * 16, $"1 - UP   : {moveComposite.GetBindingDisplayString(keys[0]).ToUpper()}");
+            PlaceText(7, 6 * 16, $"2 - DOWN : {moveComposite.GetBindingDisplayString(keys[1]).ToUpper()}");
+            PlaceText(7, 5 * 16, $"3 - LEFT : {moveComposite.GetBindingDisplayString(keys[2]).ToUpper()}");
+            PlaceText(7, 4 * 16, $"4 - RIGHT: {moveComposite.GetBindingDisplayString(keys[3]).ToUpper()}");
+            PlaceText(7, 3 * 16, $"5 - FIRE : {fireAction.GetBindingDisplayString(0).ToUpper()}");
         }
         else
         {
