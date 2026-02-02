@@ -7,6 +7,20 @@ public class DeadPlayer : MonoBehaviour
     public int Bombs;
     public int AtomicBombs;
     public bool KeepForce;
+    public Sprite[] sprites;
+
+    SpriteRenderer sr;
+
+    void Start()
+    {
+        sr = GetComponent<SpriteRenderer>();
+    }
+
+    void Update()
+    {
+        int index = (int)LevelManager.LightLevel;
+        sr.sprite = sprites[index];
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {

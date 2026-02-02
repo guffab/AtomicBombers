@@ -5,14 +5,25 @@ using UnityEngine;
 
 public class Consumable : MonoBehaviour
 {
-    static readonly System.Random random = new();
     static readonly List<Kind> options = Enum.GetValues(typeof(Kind)).Cast<Kind>().Skip(1).ToList();
+
     public Kind Type;
+    public Sprite[] sprites;
+
+    SpriteRenderer sr;
 
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
+
         if (Type is Kind.Unset)
-            Type = options[random.Next(options.Count)];
+            Type = options[SharedRandom.Next(options.Count)];
+    }
+
+    void Update()
+    {
+        int index = (int)Type - 1 + (int)LevelManager.LightLevel * 10;
+        sr.sprite = sprites[index];
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -28,23 +39,23 @@ public class Consumable : MonoBehaviour
     {
         if (Type is Kind.Light)
             LevelManager.ChangeLight(consumed);
-        
+
         Grid.Current.Remove(gameObject);
         Destroy(gameObject);
     }
 
     public enum Kind
     {
-        Unset,
+        Unset = 0,
+        Megabomb,
         Light,
-        KeepForce,
         Powder,
         Bomb,
-        Atomicbomb,
-        Megabomb,
-        Pacman,
-        Immortal,
-        Ghost,
         Surprise,
+        Atomicbomb,
+        KeepForce,
+        Pacman,
+        Ghost,
+        Immortal,
     }
 }

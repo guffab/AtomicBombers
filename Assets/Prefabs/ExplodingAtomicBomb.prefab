@@ -15,7 +15,7 @@ PrefabInstance:
     - target: {fileID: 7517439511430270339, guid: 2018226b601300c3990ba2e6bb029596, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -7732677192799872877, guid: 04477f53b91cfb78aa163ff37f8b233b, type: 3}
+      objectReference: {fileID: -9026449201829243768, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
     - target: {fileID: 7894608927123560015, guid: 2018226b601300c3990ba2e6bb029596, type: 3}
       propertyPath: m_Name
       value: ExplodingAtomicBomb

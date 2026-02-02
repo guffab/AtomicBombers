@@ -13,12 +13,14 @@ public class Block : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        SetStyle();
     }
 
-    private void SetStyle()
+    void Update()
     {
-        int index = (int)state + 6 * (Math.Min(Math.Abs(style), 10) - 1);
+        int styleOffset = 6 * (Math.Min(Math.Abs(style), 10) - 1);
+        int lightOffset = (int)LevelManager.LightLevel * (sprites.Length / 3);
+        int index = (int)state + styleOffset + lightOffset;
+
         sr.sprite = sprites[index];
     }
 
@@ -28,16 +30,10 @@ public class Block : MonoBehaviour
             return;
 
         if (state is State.SlightlyDamaged)
-        {
             state = State.MediumDamaged;
-            SetStyle();
-        }
 
         else if (state is State.MediumDamaged)
-        {
             state = State.HeavyDamaged;
-            SetStyle();
-        }
 
         else if (state is State.HeavyDamaged)
         {

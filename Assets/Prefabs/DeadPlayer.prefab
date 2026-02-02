@@ -105,6 +105,10 @@ MonoBehaviour:
   Bombs: 0
   AtomicBombs: 0
   KeepForce: 0
+  sprites:
+  - {fileID: -6423291003814609317, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: -839100060, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: 1699756121, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
 --- !u!61 &-8685462840859925016
 BoxCollider2D:
   m_ObjectHideFlags: 0

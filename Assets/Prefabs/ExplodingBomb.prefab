@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -4903931695895684223, guid: 04477f53b91cfb78aa163ff37f8b233b, type: 3}
+  m_Sprite: {fileID: -1844695873760496200, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,3 +104,10 @@ MonoBehaviour:
   strength: 1
   delay: 3
   kind: 0
+  sprites:
+  - {fileID: -1844695873760496200, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: -9026449201829243768, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: -2088360686, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: 507042293, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: -115330528, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: 940186305, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}

@@ -28,8 +28,8 @@ public class Explosion : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<Player>(out var player))
         {
-            player.Kill();
             hasKilledPlayer = true;
+            player.Kill();
         }
     }
 

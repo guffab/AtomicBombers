@@ -411,7 +411,8 @@ public class Player : MonoBehaviour
             appearance = SelectWorst(newAppearance);
             ResetSickness();
 
-            if (newAppearance is Appearance.Sick)
+            //new (accepted) illness (e.g., pacman can't get infected)
+            if (appearance is Appearance.Sick && newAppearance is Appearance.Sick)
             {
                 var sicknessType = SharedRandom.Next(5);
 

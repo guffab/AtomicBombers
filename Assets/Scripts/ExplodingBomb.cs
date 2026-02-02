@@ -8,12 +8,24 @@ public class ExplodingBomb : ExplosiveBase
     public int strength;
     public float delay;
     public Kind kind;
+    public Sprite[] sprites;
+
     internal Player player;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    SpriteRenderer sr;
+
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         StartCoroutine(ExecuteAfterWait(delay));
+    }
+
+    void Update()
+    {
+        int lightOffset = (int)LevelManager.LightLevel * (sprites.Length / 3);
+        int index = (int)kind + lightOffset;
+        
+        sr.sprite = sprites[index];
     }
 
     IEnumerator ExecuteAfterWait(float duration)
@@ -32,61 +44,5 @@ public class ExplodingBomb : ExplosiveBase
     {
         if (player != null) player.availableBombs++;
         base.Explode(strength, kind is Kind.Atomic);
-    }
-}
-
-public abstract class ExplosiveBase : MonoBehaviour
-{
-    public GameObject ExplosionPrefab;
-
-    public virtual void Explode(int strength, bool unstoppable)
-    {
-        var grid = Grid.Current;
-        var currentPos = grid.Remove(gameObject);
-
-        //spawn explosions unless already present
-        TryInstantiateExplosion(grid, currentPos, strength, unstoppable);
-
-        for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.up * i), strength, unstoppable))
-                break;
-
-        for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.down * i), strength, unstoppable))
-                break;
-
-        for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.left * i), strength, unstoppable))
-                break;
-
-        for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.right * i), strength, unstoppable))
-                break;
-
-        Destroy(gameObject);
-    }
-
-    private bool TryInstantiateExplosion(Grid grid, Vector2Int position, int strength, bool unstoppable)
-    {
-        var objects = grid.GetObjects(position);
-        bool isExploding = objects.Any(x => x.TryGetComponent<Explosion>(out _));
-
-        if (!objects.Have<Explosion>()) //prevent doing more damage
-        {
-            var explosionObject = Instantiate(ExplosionPrefab, grid.ToWorld(position), Quaternion.identity);
-            grid.Add(explosionObject, position);
-
-            var explosion = explosionObject.GetComponent<Explosion>();
-            explosion.Strength = strength;
-            explosion.Unstoppable = unstoppable;
-        }
-
-        if (objects.Have<Block>(out var block))
-            return unstoppable && block.state is Block.State.Solid or Block.State.Walkable;// or Block.State.HeavyDamaged;
-
-        if (unstoppable)
-            return true;
-        
-        return (!objects.Have<Player>(out var player) || player.appearance is Player.Appearance.Immortal) && !objects.Have<Consumable>() && !objects.Have<DeadPlayer>();
     }
 }

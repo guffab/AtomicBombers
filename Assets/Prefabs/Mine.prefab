@@ -102,6 +102,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplosionPrefab: {fileID: 5290147902024562419, guid: 2f037302db9fac6449dc5deb215176fb, type: 3}
+  sprites:
+  - {fileID: -514133688619455827, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: 1787415898, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  - {fileID: 675995683, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
 --- !u!61 &-8778805130407204303
 BoxCollider2D:
   m_ObjectHideFlags: 0

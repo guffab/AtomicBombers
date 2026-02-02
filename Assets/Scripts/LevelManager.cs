@@ -16,9 +16,11 @@ public class LevelManager : MonoBehaviour
     public static LevelData Level => Levels[(GameRound + Setup.LevelOffset) % Levels.Count];
     public static int LevelCount => Levels.Count;
     public static int GameRound { get; private set; } = 0;
+    public static LevelData.During LightLevel { get; private set; }
 
     List<Player> players = new();
     List<Explosion> explosions = new();
+    LevelData.During lightLevel;
 
     //prefabs
     public GameObject IndestructibleBlockPrefab;
@@ -42,9 +44,7 @@ public class LevelManager : MonoBehaviour
     public GameObject ImmortalPrefab;
     public GameObject GhostPrefab;
     public GameObject SurprisePrefab;
-    public GameObject Foreground;
     public GameObject Background;
-    private LevelData.During lightLevel;
 
     public static void Load()
     {
@@ -70,7 +70,8 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        lightLevel = Level.TimeOfDay;
+        //not sure, but most likely this was intended for random lighting
+        lightLevel = Level.TimeOfDay is (LevelData.During)3 ? (LevelData.During)SharedRandom.Next(3) : Level.TimeOfDay;
 
         if (players.Count <= 1)
             StartCoroutine(ExecuteAfterWait(3f));
@@ -87,9 +88,9 @@ public class LevelManager : MonoBehaviour
         }
 
         if (explosions.Any())
-            TempChangeLight(LevelData.During.Day);
+            LightLevel = LevelData.During.Day;
         else
-            TempChangeLight(lightLevel);
+            LightLevel = lightLevel;
     }
 
     void OnDestroy()
@@ -124,20 +125,6 @@ public class LevelManager : MonoBehaviour
     public static void ChangeLight(bool lightOn)
     {
         Instance.lightLevel = lightOn ? LevelData.During.Day : LevelData.During.Night;
-    }
-
-    private void TempChangeLight(LevelData.During during)
-    {
-        var darkness = during switch
-        {
-            LevelData.During.Day => 0,
-            LevelData.During.Night => 253,
-            LevelData.During.Dawn or (LevelData.During)3 => 185, //not sure what this value means
-            _ => SharedRandom.Next(250)
-        };
-
-        var renderer = Instance.Foreground.GetComponent<SpriteRenderer>();
-        renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, darkness / 255f);
     }
 
     private void PlaceElement(LevelData.GridElement gridElement, Vector2Int gridPos)
@@ -239,10 +226,10 @@ public class LevelManager : MonoBehaviour
 
             //red blinking effect
             var renderer = Instance.Background.GetComponent<SpriteRenderer>();
-            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 1);
+            renderer.color = new Color(148 / 255f, 16 / 255f, 0);
 
             yield return new WaitForSeconds(.4f);
-            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0);
+            renderer.color = new Color(0,0,0);
 
             yield return new WaitForSeconds(.4f);
         }
