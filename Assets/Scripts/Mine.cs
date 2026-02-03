@@ -21,6 +21,6 @@ public class Mine : ExplosiveBase
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.TryGetComponent<Player>(out var player))
-            Explode(player.Strength, false);
+            Explode(player.Strength, false, player.playerNumber);
     }
 }

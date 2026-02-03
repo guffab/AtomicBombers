@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour
         lightLevel = Level.TimeOfDay is (LevelData.During)3 ? (LevelData.During)SharedRandom.Next(3) : Level.TimeOfDay;
 
         if (players.Count <= 1)
-            StartCoroutine(ExecuteAfterWait(3f));
+            StartCoroutine(CrownWinnersAndLeave(3f));
 
         StartCoroutine(HandleDangerLight());
     }
@@ -99,17 +99,17 @@ public class LevelManager : MonoBehaviour
     }
 
     public static void Register(Player player) => Instance.players.Add(player);
-    public static void Unregister(Player player) => Instance.UnregisterInstance(player);
+    public static void Unregister(Player player, int killedBy) => Instance.UnregisterInstance(player, killedBy);
     public static void Register(Explosion explosion) => Instance.explosions.Add(explosion);
     public static void Unregister(Explosion explosion) => Instance.explosions.Remove(explosion);
 
-    private void UnregisterInstance(Player player)
+    private void UnregisterInstance(Player player, int killedBy)
     {
         players.Remove(player);
-        Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, 0, false), false);
+        Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, killedBy, player.Strength, player.Bombs, 0, false), false);
 
         if (players.Count <= 1)
-            StartCoroutine(ExecuteAfterWait(7f));
+            StartCoroutine(CrownWinnersAndLeave(7f));
     }
 
     public static void PlaceNewElement(Vector2Int gridPos)
@@ -204,12 +204,12 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    private IEnumerator ExecuteAfterWait(float duration)
+    private IEnumerator CrownWinnersAndLeave(float duration)
     {
         yield return new WaitForSeconds(duration);
 
         foreach (var player in players)
-            Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, player.Strength, player.Bombs, player.AtomicBombs, player.KeepForce), true);
+            Highscore.AddPlayerDetails(new Highscore.PlayerDetails(player.playerNumber, -1, player.Strength, player.Bombs, player.AtomicBombs, player.KeepForce), true);
 
         SceneManager.LoadScene("Highscore");
     }

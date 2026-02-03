@@ -25,7 +25,7 @@ public class Highscore : UIScene
             PlaceUI(1, y, playerSprites[Setup.AvatarOffsets[i + 1] - 1]);
 
             PlaceUI(3, y, otherSprites[0]);
-            PlaceLargeText(4, y, Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0'));
+            PlaceLargeText(4, y, Math.Min(stats.Score, 999).ToString().PadLeft(3, '0'));
 
             PlaceUI(8, y, otherSprites[1]);
             PlaceLargeText(9, y, Math.Min(stats.Wins, 999).ToString().PadLeft(3, '0'));
@@ -68,15 +68,28 @@ public class Highscore : UIScene
 
     public static void AddPlayerDetails(PlayerDetails details, bool winner)
     {
+        //this player
         PlayerStats.TryGetValue(details.Number, out var stats);
-        stats ??= new Stats(0, false, 1, 1, null);
+        stats ??= new Stats(0, winner ? 1 : 0, false, 2, 1, null);
         PlayerStats[details.Number] = stats.Merge(details, winner);
+
+        //his killer
+        if (details.KilledBy is not -1)
+        {
+            //Selbstmord isch nit kuhl
+            int points = details.Number == details.KilledBy ? -1 : 1;
+
+            if (PlayerStats.TryGetValue(details.KilledBy, out var killerStats))
+                PlayerStats[details.KilledBy] = killerStats with { Score = Math.Max(killerStats.Score + points, 0) }; //no negative scores
+            else
+                PlayerStats[details.KilledBy] = new Stats(0, 1, false, 2, 1, null);
+        }
     }
 
     public static (int Strength, int Bombs, int AtomicBombs) GetPlayerConfig(int number)
     {
         PlayerStats.TryGetValue(number, out var stats);
-        stats ??= new Stats(0, false, 2, 1, null);
+        stats ??= new Stats(0, 0, false, 2, 1, null);
 
         if (stats.Override?.KeepForce is true)
             return (Math.Max(stats.Strength, stats.Override.Strength), Math.Max(stats.Bombs, stats.Override.Bombs), Math.Max(0, stats.Override.AtomicBombs));
@@ -104,8 +117,8 @@ public class Highscore : UIScene
                      .ToList();
     }
 
-    public record PlayerDetails(int Number, int Strength, int Bombs, int AtomicBombs, bool KeepForce);
-    private record Stats(int Wins, bool WonLastRound, int Strength, int Bombs, PlayerDetails Override)
+    public record PlayerDetails(int Number, int KilledBy, int Strength, int Bombs, int AtomicBombs, bool KeepForce);
+    private record Stats(int Wins, int Score, bool WonLastRound, int Strength, int Bombs, PlayerDetails Override)
     {
         public Stats Merge(PlayerDetails newDetails, bool winner)
         {
@@ -114,7 +127,7 @@ public class Highscore : UIScene
             var bombs = 1 + wins / 10 + (wins % 10 >= 5 ? 1 : 0); //start with 1, plus one every 5 wins (but not 10th)
 
             var kf = newDetails.KeepForce;
-            return new Stats(wins, winner, strength, bombs, new PlayerDetails(newDetails.Number, kf ? newDetails.Strength : strength, kf ? newDetails.Bombs : bombs, kf ? newDetails.AtomicBombs : 0, kf));
+            return new Stats(wins, Score, winner, strength, bombs, new PlayerDetails(newDetails.Number, -1, kf ? newDetails.Strength : strength, kf ? newDetails.Bombs : bombs, kf ? newDetails.AtomicBombs : 0, kf));
         }
     }
 }

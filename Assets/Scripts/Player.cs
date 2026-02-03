@@ -112,10 +112,12 @@ public class Player : MonoBehaviour
             sicknessTimer -= Time.deltaTime;
         else
         {
+            //pacman doesn't wear off over time
             if (appearance is not Appearance.Pacman)
             {
+                //player was ghost, but got stuck in wall
                 if (Grid.GetObjectsAtSamePlace(gameObject).Any(x => x.TryGetComponent<Block>(out var block) && block.state is Block.State.Solid))
-                    Kill();
+                    Kill(-1);
 
                 appearance = Appearance.Normal;
                 ResetSickness();
@@ -146,6 +148,7 @@ public class Player : MonoBehaviour
                 bomb.player = this;
                 bomb.strength = Strength;
                 bomb.delay = currentBombDelay;
+                bomb.byPlayer = playerNumber;
 
                 if (appearance is Appearance.Pacman)
                     appearance = AtomicBombs > 0 ? Appearance.Atomic : Appearance.Normal;
@@ -285,7 +288,7 @@ public class Player : MonoBehaviour
                 Destroy(block);
             }
 
-            other.Kill();
+            other.Kill(playerNumber);
         }
 
         if (appearance is Appearance.Ghost or Appearance.Immortal or Appearance.Sick && other.appearance is Appearance.Atomic or Appearance.Normal)
@@ -329,7 +332,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Kill()
+    public void Kill(int killedBy)
     {
         if (appearance is Appearance.Immortal)
             return;
@@ -344,7 +347,7 @@ public class Player : MonoBehaviour
         deadPlayer.AtomicBombs = AtomicBombs;
         deadPlayer.KeepForce = KeepForce;
 
-        LevelManager.Unregister(this);
+        LevelManager.Unregister(this, killedBy);
         Destroy(gameObject);
     }
 

@@ -7,6 +7,8 @@ public class ExplodingBomb : ExplosiveBase
 {
     public int strength;
     public float delay;
+    public int byPlayer;
+
     public Kind kind;
     public Sprite[] sprites;
 
@@ -31,7 +33,7 @@ public class ExplodingBomb : ExplosiveBase
     IEnumerator ExecuteAfterWait(float duration)
     {
         yield return new WaitForSeconds(duration);
-        Explode(strength, kind is Kind.Atomic);
+        Explode(strength, kind is Kind.Atomic, byPlayer);
     }
 
     public enum Kind
@@ -40,9 +42,9 @@ public class ExplodingBomb : ExplosiveBase
         Atomic,
     }
 
-    public override void Explode(int strength, bool unstoppable)
+    public override void Explode(int strength, bool unstoppable, int byPlayer)
     {
         if (player != null) player.availableBombs++;
-        base.Explode(strength, kind is Kind.Atomic);
+        base.Explode(strength, kind is Kind.Atomic, byPlayer);
     }
 }

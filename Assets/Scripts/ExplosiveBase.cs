@@ -5,34 +5,34 @@ public abstract class ExplosiveBase : MonoBehaviour
 {
     public GameObject ExplosionPrefab;
 
-    public virtual void Explode(int strength, bool unstoppable)
+    public virtual void Explode(int strength, bool unstoppable, int byPlayer)
     {
         var grid = Grid.Current;
         var currentPos = grid.Remove(gameObject);
 
         //spawn explosions unless already present
-        TryInstantiateExplosion(grid, currentPos, strength, unstoppable);
+        TryInstantiateExplosion(grid, currentPos, strength, unstoppable, byPlayer);
 
         for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.up * i), strength, unstoppable))
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.up * i), strength, unstoppable, byPlayer))
                 break;
 
         for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.down * i), strength, unstoppable))
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.down * i), strength, unstoppable, byPlayer))
                 break;
 
         for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.left * i), strength, unstoppable))
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.left * i), strength, unstoppable, byPlayer))
                 break;
 
         for (int i = 1; i <= strength; i++)
-            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.right * i), strength, unstoppable))
+            if (!TryInstantiateExplosion(grid, currentPos + (Vector2Int.right * i), strength, unstoppable, byPlayer))
                 break;
 
         Destroy(gameObject);
     }
 
-    private bool TryInstantiateExplosion(Grid grid, Vector2Int position, int strength, bool unstoppable)
+    private bool TryInstantiateExplosion(Grid grid, Vector2Int position, int strength, bool unstoppable, int byPlayer)
     {
         var objects = grid.GetObjects(position);
         bool isExploding = objects.Any(x => x.TryGetComponent<Explosion>(out _));
@@ -45,6 +45,7 @@ public abstract class ExplosiveBase : MonoBehaviour
             var explosion = explosionObject.GetComponent<Explosion>();
             explosion.Strength = strength;
             explosion.Unstoppable = unstoppable;
+            explosion.ByPlayer = byPlayer;
         }
 
         if (objects.Have<Block>(out var block))

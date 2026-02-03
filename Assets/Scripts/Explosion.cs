@@ -6,6 +6,7 @@ public class Explosion : MonoBehaviour
 {
     public int Strength;
     public bool Unstoppable;
+    public int ByPlayer;
 
     Grid Grid => Grid.Current;
 
@@ -18,7 +19,7 @@ public class Explosion : MonoBehaviour
         foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
         {
             if (element != null && element.TryGetComponent<ExplosiveBase>(out var mine))
-                mine.Explode(Strength, Unstoppable);
+                mine.Explode(Strength, Unstoppable, ByPlayer);
 
                 #warning small delay?
         }
@@ -29,7 +30,7 @@ public class Explosion : MonoBehaviour
         if (other.gameObject.TryGetComponent<Player>(out var player))
         {
             hasKilledPlayer = true;
-            player.Kill();
+            player.Kill(ByPlayer);
         }
     }
 
