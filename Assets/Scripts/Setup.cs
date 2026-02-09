@@ -94,7 +94,7 @@ public class Setup : UIScene
             var normalrandom = LevelOffset is 0 ? "NORMAL" : "RANDOM";
 
             grid = new Grid(new Vector2Int(16, 1));
-            PlaceText(5, 20 * 16, "F1 - PLAYERS:  ");
+            PlaceText(5, 20 * 16, "F1 - PLAYERS:");
             PlaceText(5, 19 * 16 - 4, $"F2 - MUSIC {onoff}");
             PlaceText(5, 18 * 16 - 8, $"F3 - {normalrandom} LEVEL START");
             PlaceText(5, 17 * 16 - 12, $"F4 - KEYBOARD CONFIG");

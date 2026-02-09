@@ -248,6 +248,6 @@ MonoBehaviour:
   otherSprites:
   - {fileID: 1269619335, guid: bbb99e37cf97c7048a513b25de9df718, type: 3}
   - {fileID: -1273413867, guid: bbb99e37cf97c7048a513b25de9df718, type: 3}
-  - {fileID: -4903931695895684223, guid: 04477f53b91cfb78aa163ff37f8b233b, type: 3}
+  - {fileID: -1844695873760496200, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
   - {fileID: 3045200348107743804, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
   - {fileID: -1954632364596753710, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
