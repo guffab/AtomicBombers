@@ -103,6 +103,7 @@ MonoBehaviour:
   ExplosionPrefab: {fileID: 5290147902024562419, guid: 2f037302db9fac6449dc5deb215176fb, type: 3}
   strength: 1
   delay: 3
+  byPlayer: 0
   kind: 0
   sprites:
   - {fileID: -1844695873760496200, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
@@ -111,3 +112,4 @@ MonoBehaviour:
   - {fileID: 507042293, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
   - {fileID: -115330528, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
   - {fileID: 940186305, guid: 640984d7c426aa4de88b3fbbc1220625, type: 3}
+  BombRestoreProxy: {fileID: 8109069146816910914, guid: b86d0cb4e996de1e3979e999447533f0, type: 3}

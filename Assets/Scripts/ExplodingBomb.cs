@@ -11,6 +11,7 @@ public class ExplodingBomb : ExplosiveBase
 
     public Kind kind;
     public Sprite[] sprites;
+    public GameObject BombRestoreProxy;
 
     internal Player player;
 
@@ -26,7 +27,7 @@ public class ExplodingBomb : ExplosiveBase
     {
         int lightOffset = (int)LevelManager.LightLevel * (sprites.Length / 3);
         int index = (int)kind + lightOffset;
-        
+
         sr.sprite = sprites[index];
     }
 
@@ -44,7 +45,12 @@ public class ExplodingBomb : ExplosiveBase
 
     public override void Explode(int strength, bool unstoppable, int byPlayer)
     {
-        if (player != null) player.availableBombs++;
+        if (player != null)
+        {
+            var proxy = Instantiate(BombRestoreProxy);
+            proxy.GetComponent<BombRestoreProxy>().player = player;
+        }
+
         base.Explode(strength, kind is Kind.Atomic, byPlayer);
     }
 }
