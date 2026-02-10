@@ -28,7 +28,6 @@ public class SoundManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("came herer");
 
         for (int i = 0; i < MaxSources - MinSources; i++)
             sourceQueueLarge.Enqueue(gameObject.AddComponent<AudioSource>());

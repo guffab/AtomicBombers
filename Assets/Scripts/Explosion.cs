@@ -56,11 +56,6 @@ public class Explosion : MonoBehaviour
         GetComponent<Renderer>().enabled = false;
         Grid.Remove(gameObject);
         LevelManager.Unregister(this);
-    }
-
-    //referenced by animation
-    public void DestroyObject()
-    {
         Destroy(gameObject);
     }
 }
