@@ -127,6 +127,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Strength: 0
   Unstoppable: 0
+  ByPlayer: 0
+  Clip: {fileID: 8300000, guid: dccc6c616fdad676aa98617a9b9e60ab, type: 3}
 --- !u!82 &8297637693999453875
 AudioSource:
   m_ObjectHideFlags: 0
@@ -139,7 +141,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: dccc6c616fdad676aa98617a9b9e60ab, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.7
   m_Pitch: 0.95
   Loop: 0

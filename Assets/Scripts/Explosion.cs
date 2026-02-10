@@ -7,6 +7,7 @@ public class Explosion : MonoBehaviour
     public int Strength;
     public bool Unstoppable;
     public int ByPlayer;
+    public AudioClip Clip;
 
     Grid Grid => Grid.Current;
 
@@ -15,13 +16,12 @@ public class Explosion : MonoBehaviour
     void Start()
     {
         LevelManager.Register(this);
+        SoundManager.Play(Clip);
 
         foreach (var element in Grid.GetObjectsAtSamePlace(gameObject).ToList())
         {
             if (element != null && element.TryGetComponent<ExplosiveBase>(out var mine))
                 mine.Explode(Strength, Unstoppable, ByPlayer);
-
-                #warning small delay?
         }
     }
 
